@@ -3,88 +3,108 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yazılım Kazanç Paneli</title>
+    <title>Gelişmiş Yazılım Kazanç Paneli</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Fira+Code&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Montserrat', sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background-color: #f0f2f5;
+            background: linear-gradient to right, #e0f2f7, #c5e1a5); /* Hafif gradyan arka plan */
             margin: 0;
             color: #333;
             flex-direction: column;
+            padding: 20px;
+            box-sizing: border-box;
         }
         .container {
             background-color: #ffffff;
             padding: 40px 50px;
-            border-radius: 12px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
             text-align: center;
-            width: 90%;
-            max-width: 600px;
+            width: 95%;
+            max-width: 800px; /* Genişletilmiş maksimum genişlik */
             box-sizing: border-box;
             border: 1px solid #e0e0e0;
         }
         h1 {
             color: #1a73e8;
             margin-bottom: 30px;
-            font-size: 2.2em;
-            letter-spacing: -0.5px;
-        }
-        .balance-display {
             font-size: 2.8em;
+            letter-spacing: -0.8px;
+            font-weight: 700;
+        }
+        .balance-section {
+            background-color: #e8f5e9;
+            padding: 25px 35px;
+            border-radius: 10px;
+            margin-bottom: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap; /* Küçük ekranlarda alt alta gelmesi için */
+            gap: 25px;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.08);
+        }
+        .balance-label {
+            font-size: 1.6em;
+            color: #388e3c;
+            font-weight: 600;
+        }
+        .balance-amount {
+            font-size: 3.2em;
             font-weight: bold;
             color: #28a745;
-            margin-bottom: 40px;
-            padding: 15px 25px;
-            background-color: #e6ffe6;
-            border-radius: 8px;
-            display: inline-block;
-            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+            letter-spacing: 1px;
         }
         .section-title {
-            font-size: 1.6em;
+            font-size: 1.8em;
             color: #555;
-            margin-top: 30px;
-            margin-bottom: 20px;
+            margin-top: 35px;
+            margin-bottom: 25px;
             border-bottom: 2px solid #f0f0f0;
-            padding-bottom: 10px;
+            padding-bottom: 12px;
+            font-weight: 600;
         }
         .code-editor {
             width: 100%;
-            height: 200px;
+            height: 250px; /* Daha yüksek editör */
             background-color: #282c34;
             color: #abb2bf;
-            border-radius: 8px;
-            padding: 15px;
-            font-family: 'Fira Code', 'Monaco', 'Consolas', monospace;
+            border-radius: 10px;
+            padding: 20px;
+            font-family: 'Fira Code', monospace;
             font-size: 1.1em;
             line-height: 1.6;
             border: 1px solid #3a3f4a;
             resize: vertical;
             box-sizing: border-box;
-            margin-bottom: 25px;
+            margin-bottom: 30px;
             overflow-y: auto;
-            white-space: pre-wrap; /* For wrapping long lines */
-            word-wrap: break-word; /* For breaking words if lines are too long */
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
         }
         .button-group {
             display: flex;
             justify-content: center;
-            gap: 20px;
+            gap: 20px; /* Butonlar arası boşluk */
             margin-top: 30px;
+            flex-wrap: wrap; /* Küçük ekranlarda alt alta gelmesi için */
         }
         .btn {
-            padding: 15px 30px;
-            font-size: 1.1em;
+            padding: 16px 35px;
+            font-size: 1.2em;
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             cursor: pointer;
             transition: all 0.3s ease;
             font-weight: 600;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            min-width: 180px; /* Butonların minimum genişliği */
         }
         .btn-primary {
             background-color: #1a73e8;
@@ -92,8 +112,8 @@
         }
         .btn-primary:hover {
             background-color: #155bb5;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
         }
         .btn-secondary {
             background-color: #6c757d;
@@ -101,118 +121,301 @@
         }
         .btn-secondary:hover {
             background-color: #5a6268;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+        .btn-success {
+            background-color: #28a745;
+            color: white;
+        }
+        .btn-success:hover {
+            background-color: #218838;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
         }
         .message {
-            margin-top: 25px;
-            font-size: 1.1em;
-            color: #d9534f;
+            margin-top: 30px;
+            font-size: 1.2em;
             font-weight: bold;
+            padding: 15px 20px;
+            border-radius: 8px;
             display: none; /* Hidden by default */
+            opacity: 0;
+            transition: opacity 0.4s ease-in-out;
+        }
+        .error-message {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
         }
         .success-message {
-            color: #28a745;
-            display: none;
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        /* Modal Stilleri */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1000; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease-in-out;
+        }
+        .modal.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+            transform: translateY(-20px);
+            transition: transform 0.3s ease-in-out;
+        }
+        .modal.active .modal-content {
+            transform: translateY(0);
+        }
+        .close-button {
+            color: #aaa;
+            float: right;
+            font-size: 32px;
+            font-weight: bold;
+            cursor: pointer;
+            position: absolute;
+            top: 15px;
+            right: 25px;
+            transition: color 0.2s;
+        }
+        .close-button:hover,
+        .close-button:focus {
+            color: #333;
+            text-decoration: none;
+        }
+        .modal-title {
+            font-size: 2em;
+            color: #1a73e8;
+            margin-bottom: 25px;
+            font-weight: 700;
+        }
+        .modal-body p {
+            font-size: 1.1em;
+            line-height: 1.6;
+            color: #555;
+            margin-bottom: 20px;
+        }
+        .modal-body label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #444;
+            font-size: 1.1em;
+        }
+        .modal-body input[type="text"] {
+            width: calc(100% - 22px);
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 1em;
+            box-sizing: border-box;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Yazılım Geliştirici Paneli</h1>
-        <div class="balance-display" id="balanceDisplay">Yazılımdan Kazandığınız Para: 1000₺</div>
 
-        <div class="section-title">Kod Editörü</div>
+        <div class="balance-section">
+            <span class="balance-label">Yazılımdan Kazandığınız Para:</span>
+            <span class="balance-amount" id="balanceDisplay">1000₺</span>
+        </div>
+
+        <div class="section-title">Kod Geliştirme Ortamı</div>
         <div class="code-editor" contenteditable="true" id="codeEditor">
-            // Buraya harika kodlar yazarak kazancınızı artırın!
-            function calculateRevenue(linesOfCode) {
-                return linesOfCode * 0.5 + Math.random() * 100;
+            // Harika fikirlerinizi koda dönüştürün ve kazancınızı katlayın!
+            // Bu alan, geliştirmekte olduğunuz projelerinizi simüle eder.
+            // Yeni özellikler ekleyin, hataları düzeltin, performans iyileştirmeleri yapın.
+
+            function deployNewFeature(featureName) {
+                console.log(`'${featureName}' özelliği devreye alınıyor...`);
+                // Sunucuya dağıtım işlemleri simüle ediliyor
+                return true;
             }
 
-            // Yeni bir modül geliştiriliyor...
-            const newModule = () => {
-                console.log("Yeni özellikler ekleniyor...");
-                // Daha fazla kod burada
-            };
+            class RevenueOptimizer {
+                constructor() {
+                    this.baseRate = 0.75;
+                }
+                calculate(linesOfCode, complexity) {
+                    return (linesOfCode * this.baseRate) + (complexity * 15) + Math.random() * 50;
+                }
+            }
+
+            const optimizer = new RevenueOptimizer();
+            // console.log("Tahmini kazanç:", optimizer.calculate(1500, 7));
         </div>
 
         <div class="button-group">
             <button class="btn btn-primary" id="runCodeBtn">Kodu Çalıştır ve Kazanç Hesapla</button>
+            <button class="btn btn-primary" id="downloadProjectBtn">Proje Dosyalarını İndir</button>
         </div>
 
-        <div class="section-title">Yazılım Yönetimi</div>
+        <div class="section-title">Finansal İşlemler</div>
         <div class="button-group">
-            <button class="btn btn-primary" id="uploadSoftwareBtn">Yazılım Yükle</button>
-            <button class="btn btn-secondary" id="transferMoneyBtn">Parayı Bakiyeye At</button>
+            <button class="btn btn-success" id="openWithdrawModalBtn">Bakiyeyi Karta Aktar</button>
         </div>
 
-        <div class="message" id="errorMessage">İşlem Başarısız: Sunucuya bağlanılamadı.</div>
-        <div class="message success-message" id="successMessage">İşlem Başarılı!</div>
+        <div class="message error-message" id="errorMessage"></div>
+        <div class="message success-message" id="successMessage"></div>
+    </div>
+
+    <div id="withdrawModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" id="closeWithdrawModalBtn">&times;</span>
+            <h2 class="modal-title">Bakiyeyi Karta Aktar</h2>
+            <div class="modal-body">
+                <p>Mevcut bakiyenizi aşağıdan belirteceğiniz banka kartınıza aktarabilirsiniz. İşlem, bankanızın yoğunluğuna göre 1-3 iş günü sürebilir.</p>
+                <label for="cardNumber">Banka Kartı Numarası:</label>
+                <input type="text" id="cardNumber" placeholder="xxxx xxxx xxxx xxxx" maxlength="19">
+                <label for="amountToWithdraw">Aktarılacak Tutar (₺):</label>
+                <input type="text" id="amountToWithdraw" placeholder="Örn: 500" value="">
+                <button class="btn btn-success" id="confirmWithdrawBtn">Aktarımı Onayla</button>
+            </div>
+        </div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const balanceDisplay = document.getElementById('balanceDisplay');
             const runCodeBtn = document.getElementById('runCodeBtn');
-            const uploadSoftwareBtn = document.getElementById('uploadSoftwareBtn');
-            const transferMoneyBtn = document.getElementById('transferMoneyBtn');
+            const downloadProjectBtn = document.getElementById('downloadProjectBtn');
+            const openWithdrawModalBtn = document.getElementById('openWithdrawModalBtn');
             const errorMessage = document.getElementById('errorMessage');
             const successMessage = document.getElementById('successMessage');
             const codeEditor = document.getElementById('codeEditor');
 
+            const withdrawModal = document.getElementById('withdrawModal');
+            const closeWithdrawModalBtn = document.getElementById('closeWithdrawModalBtn');
+            const confirmWithdrawBtn = document.getElementById('confirmWithdrawBtn');
+            const cardNumberInput = document.getElementById('cardNumber');
+            const amountToWithdrawInput = document.getElementById('amountToWithdraw');
+
             let currentBalance = 1000; // Başlangıç bakiyesi
 
             function updateBalanceDisplay() {
-                balanceDisplay.textContent = `Yazılımdan Kazandığınız Para: ${currentBalance}₺`;
+                balanceDisplay.textContent = `${currentBalance}₺`;
+                amountToWithdrawInput.value = currentBalance; // Modal açıldığında tüm bakiyeyi göster
             }
 
-            function showMessage(element, isSuccess) {
+            function showMessage(element, isSuccess, messageText) {
                 errorMessage.style.display = 'none';
                 successMessage.style.display = 'none';
+                errorMessage.style.opacity = 0;
+                successMessage.style.opacity = 0;
+
+                element.textContent = messageText;
                 element.style.display = 'block';
-                if (isSuccess) {
-                    element.classList.remove('message');
-                    element.classList.add('success-message');
-                } else {
-                    element.classList.remove('success-message');
-                    element.classList.add('message');
-                }
                 setTimeout(() => {
-                    element.style.display = 'none';
-                }, 3000); // 3 saniye sonra mesajı gizle
+                    element.style.opacity = 1;
+                }, 10); // Kısa bir gecikme ile opacity değişimi
+
+                setTimeout(() => {
+                    element.style.opacity = 0;
+                    setTimeout(() => {
+                        element.style.display = 'none';
+                    }, 400); // Opacity geçiş süresi kadar bekle
+                }, 4000); // 4 saniye sonra mesajı gizle
             }
 
+            // Kodu Çalıştır ve Kazanç Hesapla
             runCodeBtn.addEventListener('click', () => {
-                // Kod çalıştırma animasyonu veya ilerleme çubuğu eklenebilir
-                showMessage(successMessage, true); // Her zaman başarılı gibi göster
-                successMessage.textContent = "Kod başarıyla çalıştırıldı ve kazanç hesaplandı!";
-                // Gerçekte bir hesaplama yapmıyoruz, sadece simülasyon
-                currentBalance += Math.floor(Math.random() * 200) + 50; // Rastgele 50-250₺ arası ekle
+                const codeLines = codeEditor.innerText.split('\n').filter(line => line.trim() !== '').length;
+                const randomEarned = Math.floor(Math.random() * 200) + 50 + (codeLines * 0.1); // Kod satırına göre de kazanç ekle
+                currentBalance += randomEarned;
                 updateBalanceDisplay();
+                showMessage(successMessage, true, `Kod başarıyla çalıştırıldı! Yeni kazancınız: ${randomEarned.toFixed(2)}₺ eklendi.`);
             });
 
-            uploadSoftwareBtn.addEventListener('click', () => {
-                // Yükleme animasyonu veya ilerleme çubuğu eklenebilir
-                const randomSuccess = Math.random() > 0.2; // %80 ihtimalle başarılı
-                if (randomSuccess) {
-                    showMessage(successMessage, true);
-                    successMessage.textContent = "Yazılım başarıyla yüklendi! Yeni projeler için hazır.";
-                } else {
-                    showMessage(errorMessage, false);
-                    errorMessage.textContent = "Yazılım yüklenirken bir hata oluştu. Lütfen tekrar deneyin.";
+            // Proje Dosyalarını İndir
+            downloadProjectBtn.addEventListener('click', () => {
+                showMessage(successMessage, true, 'Proje dosyaları hazırlanıyor... İndirme işlemi birazdan başlayacak!');
+                // Gerçek bir indirme yapmayacağız, sadece simüle edeceğiz
+                setTimeout(() => {
+                    alert('YazılımProjesi.zip dosyası başarıyla indirildi!');
+                }, 1500);
+            });
+
+            // Bakiyeyi Karta Aktar Modalını Aç
+            openWithdrawModalBtn.addEventListener('click', () => {
+                updateBalanceDisplay(); // Modalı açmadan önce bakiyeyi güncelle
+                withdrawModal.classList.add('active');
+            });
+
+            // Bakiyeyi Karta Aktar Modalını Kapat
+            closeWithdrawModalBtn.addEventListener('click', () => {
+                withdrawModal.classList.remove('active');
+            });
+
+            window.addEventListener('click', (event) => {
+                if (event.target == withdrawModal) {
+                    withdrawModal.classList.remove('active');
                 }
             });
 
-            transferMoneyBtn.addEventListener('click', () => {
-                if (currentBalance > 0) {
-                    const transferredAmount = currentBalance;
-                    currentBalance = 0; // Bakiyeyi sıfırla
+            // Kart Numarası Formatlama
+            cardNumberInput.addEventListener('input', (event) => {
+                let value = event.target.value.replace(/\s/g, ''); // Boşlukları kaldır
+                let formattedValue = '';
+                for (let i = 0; i < value.length; i++) {
+                    if (i > 0 && i % 4 === 0) {
+                        formattedValue += ' ';
+                    }
+                    formattedValue += value[i];
+                }
+                event.target.value = formattedValue;
+            });
+
+            // Aktarımı Onayla
+            confirmWithdrawBtn.addEventListener('click', () => {
+                const enteredCardNumber = cardNumberInput.value.replace(/\s/g, '');
+                const amount = parseFloat(amountToWithdrawInput.value);
+
+                if (!enteredCardNumber || enteredCardNumber.length < 16) {
+                    showMessage(errorMessage, false, 'Lütfen geçerli bir banka kartı numarası girin.');
+                    return;
+                }
+                if (isNaN(amount) || amount <= 0 || amount > currentBalance) {
+                    showMessage(errorMessage, false, `Aktarılacak tutar geçersiz veya bakiyenizden fazla. Maksimum: ${currentBalance}₺`);
+                    return;
+                }
+
+                // Sahte aktarım işlemi
+                const transferSuccess = Math.random() > 0.1; // %90 ihtimalle başarılı
+                withdrawModal.classList.remove('active'); // Modalı kapat
+
+                if (transferSuccess) {
+                    currentBalance -= amount;
+                    if (currentBalance < 0) currentBalance = 0; // Negatif bakiyeyi engelle
                     updateBalanceDisplay();
-                    showMessage(successMessage, true);
-                    successMessage.textContent = `${transferredAmount}₺ bakiyenize başarıyla aktarıldı!`;
+                    showMessage(successMessage, true, `${amount}₺ banka kartınıza başarıyla aktarıldı!`);
                 } else {
-                    showMessage(errorMessage, false);
-                    errorMessage.textContent = "Bakiyenizde aktarılacak para bulunmuyor.";
+                    showMessage(errorMessage, false, 'Para aktarımı sırasında bir hata oluştu. Lütfen bilgileri kontrol edip tekrar deneyin.');
                 }
             });
 
