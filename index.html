@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yazılım Kazanç Paneli</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f0f2f5;
+            margin: 0;
+            color: #333;
+            flex-direction: column;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 40px 50px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 90%;
+            max-width: 600px;
+            box-sizing: border-box;
+            border: 1px solid #e0e0e0;
+        }
+        h1 {
+            color: #1a73e8;
+            margin-bottom: 30px;
+            font-size: 2.2em;
+            letter-spacing: -0.5px;
+        }
+        .balance-display {
+            font-size: 2.8em;
+            font-weight: bold;
+            color: #28a745;
+            margin-bottom: 40px;
+            padding: 15px 25px;
+            background-color: #e6ffe6;
+            border-radius: 8px;
+            display: inline-block;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        .section-title {
+            font-size: 1.6em;
+            color: #555;
+            margin-top: 30px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 10px;
+        }
+        .code-editor {
+            width: 100%;
+            height: 200px;
+            background-color: #282c34;
+            color: #abb2bf;
+            border-radius: 8px;
+            padding: 15px;
+            font-family: 'Fira Code', 'Monaco', 'Consolas', monospace;
+            font-size: 1.1em;
+            line-height: 1.6;
+            border: 1px solid #3a3f4a;
+            resize: vertical;
+            box-sizing: border-box;
+            margin-bottom: 25px;
+            overflow-y: auto;
+            white-space: pre-wrap; /* For wrapping long lines */
+            word-wrap: break-word; /* For breaking words if lines are too long */
+        }
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+        .btn {
+            padding: 15px 30px;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .btn-primary {
+            background-color: #1a73e8;
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: #155bb5;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+        .btn-secondary:hover {
+            background-color: #5a6268;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        .message {
+            margin-top: 25px;
+            font-size: 1.1em;
+            color: #d9534f;
+            font-weight: bold;
+            display: none; /* Hidden by default */
+        }
+        .success-message {
+            color: #28a745;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Yazılım Geliştirici Paneli</h1>
+        <div class="balance-display" id="balanceDisplay">Yazılımdan Kazandığınız Para: 1000₺</div>
+
+        <div class="section-title">Kod Editörü</div>
+        <div class="code-editor" contenteditable="true" id="codeEditor">
+            // Buraya harika kodlar yazarak kazancınızı artırın!
+            function calculateRevenue(linesOfCode) {
+                return linesOfCode * 0.5 + Math.random() * 100;
+            }
+
+            // Yeni bir modül geliştiriliyor...
+            const newModule = () => {
+                console.log("Yeni özellikler ekleniyor...");
+                // Daha fazla kod burada
+            };
+        </div>
+
+        <div class="button-group">
+            <button class="btn btn-primary" id="runCodeBtn">Kodu Çalıştır ve Kazanç Hesapla</button>
+        </div>
+
+        <div class="section-title">Yazılım Yönetimi</div>
+        <div class="button-group">
+            <button class="btn btn-primary" id="uploadSoftwareBtn">Yazılım Yükle</button>
+            <button class="btn btn-secondary" id="transferMoneyBtn">Parayı Bakiyeye At</button>
+        </div>
+
+        <div class="message" id="errorMessage">İşlem Başarısız: Sunucuya bağlanılamadı.</div>
+        <div class="message success-message" id="successMessage">İşlem Başarılı!</div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const balanceDisplay = document.getElementById('balanceDisplay');
+            const runCodeBtn = document.getElementById('runCodeBtn');
+            const uploadSoftwareBtn = document.getElementById('uploadSoftwareBtn');
+            const transferMoneyBtn = document.getElementById('transferMoneyBtn');
+            const errorMessage = document.getElementById('errorMessage');
+            const successMessage = document.getElementById('successMessage');
+            const codeEditor = document.getElementById('codeEditor');
+
+            let currentBalance = 1000; // Başlangıç bakiyesi
+
+            function updateBalanceDisplay() {
+                balanceDisplay.textContent = `Yazılımdan Kazandığınız Para: ${currentBalance}₺`;
+            }
+
+            function showMessage(element, isSuccess) {
+                errorMessage.style.display = 'none';
+                successMessage.style.display = 'none';
+                element.style.display = 'block';
+                if (isSuccess) {
+                    element.classList.remove('message');
+                    element.classList.add('success-message');
+                } else {
+                    element.classList.remove('success-message');
+                    element.classList.add('message');
+                }
+                setTimeout(() => {
+                    element.style.display = 'none';
+                }, 3000); // 3 saniye sonra mesajı gizle
+            }
+
+            runCodeBtn.addEventListener('click', () => {
+                // Kod çalıştırma animasyonu veya ilerleme çubuğu eklenebilir
+                showMessage(successMessage, true); // Her zaman başarılı gibi göster
+                successMessage.textContent = "Kod başarıyla çalıştırıldı ve kazanç hesaplandı!";
+                // Gerçekte bir hesaplama yapmıyoruz, sadece simülasyon
+                currentBalance += Math.floor(Math.random() * 200) + 50; // Rastgele 50-250₺ arası ekle
+                updateBalanceDisplay();
+            });
+
+            uploadSoftwareBtn.addEventListener('click', () => {
+                // Yükleme animasyonu veya ilerleme çubuğu eklenebilir
+                const randomSuccess = Math.random() > 0.2; // %80 ihtimalle başarılı
+                if (randomSuccess) {
+                    showMessage(successMessage, true);
+                    successMessage.textContent = "Yazılım başarıyla yüklendi! Yeni projeler için hazır.";
+                } else {
+                    showMessage(errorMessage, false);
+                    errorMessage.textContent = "Yazılım yüklenirken bir hata oluştu. Lütfen tekrar deneyin.";
+                }
+            });
+
+            transferMoneyBtn.addEventListener('click', () => {
+                if (currentBalance > 0) {
+                    const transferredAmount = currentBalance;
+                    currentBalance = 0; // Bakiyeyi sıfırla
+                    updateBalanceDisplay();
+                    showMessage(successMessage, true);
+                    successMessage.textContent = `${transferredAmount}₺ bakiyenize başarıyla aktarıldı!`;
+                } else {
+                    showMessage(errorMessage, false);
+                    errorMessage.textContent = "Bakiyenizde aktarılacak para bulunmuyor.";
+                }
+            });
+
+            updateBalanceDisplay(); // Sayfa yüklendiğinde bakiyeyi göster
+        });
+    </script>
+</body>
+</html>
