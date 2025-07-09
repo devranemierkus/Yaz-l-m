@@ -127,6 +127,12 @@
             gap: 35px;
             box-shadow: 0 10px 25px rgba(40, 167, 69, 0.4);
             animation: bounceIn 0.8s ease-out;
+            cursor: pointer; /* Tıklanabilir olduğunu belirtir */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .balance-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(40, 167, 69, 0.5);
         }
         .balance-label {
             font-size: 2em;
@@ -379,7 +385,7 @@
             font-size: 1.2em;
             text-align: left;
         }
-        .modal-body input[type="text"], .modal-body input[type="number"], .modal-body textarea {
+        .modal-body input[type="text"], .modal-body input[type="number"], .modal-body textarea, .modal-body select {
             width: calc(100% - 28px);
             padding: 18px;
             margin-bottom: 30px;
@@ -389,7 +395,7 @@
             box-sizing: border-box;
             transition: border-color 0.3s, box-shadow 0.3s;
         }
-        .modal-body input:focus, .modal-body textarea:focus {
+        .modal-body input:focus, .modal-body textarea:focus, .modal-body select:focus {
             border-color: var(--primary-color);
             box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.2);
             outline: none;
@@ -592,6 +598,7 @@
         .status-active { background-color: #e6ffe6; color: var(--primary-dark-color); }
         .status-development { background-color: #e0f2f7; color: var(--secondary-dark-color); }
         .status-maintenance { background-color: #fff3e0; color: orange; }
+        .status-danger { background-color: #f8d7da; color: #dc3545; }
         .software-description {
             font-size: 1em;
             color: var(--text-light-color);
@@ -707,6 +714,31 @@
                 font-size: 1em;
             }
         }
+
+        /* Bakiye Detayları Modalı */
+        .balance-details-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px dashed var(--border-color);
+        }
+        .balance-details-row:last-child {
+            border-bottom: none;
+        }
+        .balance-details-label {
+            font-weight: 600;
+            color: var(--text-color);
+            font-size: 1.1em;
+        }
+        .balance-details-value {
+            font-weight: 500;
+            color: var(--primary-dark-color);
+            font-size: 1.1em;
+        }
+        .balance-details-value.text-accent {
+            color: var(--accent-color);
+        }
     </style>
 </head>
 <body>
@@ -716,7 +748,7 @@
             <p>Geliştirme süreçlerinizi yönetin, projelerinizden kazanç sağlayın ve finansal akışınızı takip edin.</p>
         </header>
 
-        <div class="balance-section">
+        <div class="balance-section" id="openBalanceDetailsModalBtn">
             <span class="balance-label"><i class="fas fa-wallet"></i> Mevcut Bakiyeniz:</span>
             <span class="balance-amount" id="balanceDisplay">1000.00₺</span>
         </div>
@@ -938,7 +970,7 @@
                 <label for="newSoftwareDescription">Açıklama:</label>
                 <textarea id="newSoftwareDescription" rows="3" placeholder="Yazılımınızın kısa bir açıklaması..."></textarea>
                 <label for="newSoftwareStatus">Durum:</label>
-                <select id="newSoftwareStatus" style="width: calc(100% - 28px); padding: 18px; margin-bottom: 30px; border: 1px solid var(--border-color); border-radius: 10px; font-size: 1.15em; box-sizing: border-box;">
+                <select id="newSoftwareStatus">
                     <option value="Aktif">Aktif</option>
                     <option value="Geliştirmede">Geliştirmede</option>
                     <option value="Bakımda">Bakımda</option>
@@ -948,6 +980,52 @@
             </div>
         </div>
     </div>
+
+    <div id="balanceDetailsModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" id="closeBalanceDetailsModalBtn">&times;</span>
+            <h2 class="modal-title"><i class="fas fa-info-circle"></i> Bakiye ve Hesap Detayları</h2>
+            <div class="modal-body" style="text-align: left;">
+                <p style="text-align: center; margin-bottom: 25px;">Güncel finansal durumunuz ve hesap bilgileriniz aşağıdadır.</p>
+
+                <div class="balance-details-row">
+                    <span class="balance-details-label"><i class="fas fa-wallet"></i> Mevcut Bakiye:</span>
+                    <span class="balance-details-value" id="detailCurrentBalance">0.00₺</span>
+                </div>
+                <div class="balance-details-row">
+                    <span class="balance-details-label"><i class="fas fa-coins"></i> Toplam Kazanılan:</span>
+                    <span class="balance-details-value" id="detailTotalEarned">0.00₺</span>
+                </div>
+                <div class="balance-details-row">
+                    <span class="balance-details-label"><i class="fas fa-arrow-alt-circle-down"></i> Son Kazanç:</span>
+                    <span class="balance-details-value" id="detailLastEarnings">0.00₺</span>
+                </div>
+                 <div class="balance-details-row">
+                    <span class="balance-details-label"><i class="fas fa-arrow-alt-circle-up"></i> Toplam Çekilen:</span>
+                    <span class="balance-details-value text-accent" id="detailTotalWithdrawn">0.00₺</span>
+                </div>
+
+                <h3 style="margin-top: 40px; margin-bottom: 20px; font-size: 1.8em; color: var(--secondary-color); text-align: center;"><i class="fas fa-user"></i> Hesap Bilgileri</h3>
+                <div class="balance-details-row">
+                    <span class="balance-details-label">Ad Soyad:</span>
+                    <span class="balance-details-value text-accent" id="detailProfileName"></span>
+                </div>
+                <div class="balance-details-row">
+                    <span class="balance-details-label">Kullanıcı Adı:</span>
+                    <span class="balance-details-value text-accent" id="detailProfileUsername"></span>
+                </div>
+                <div class="balance-details-row">
+                    <span class="balance-details-label">E-posta:</span>
+                    <span class="balance-details-value text-accent" id="detailProfileEmail"></span>
+                </div>
+                 <div class="balance-details-row">
+                    <span class="balance-details-label">Rol:</span>
+                    <span class="balance-details-value text-accent" id="detailProfileRole"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -1031,12 +1109,27 @@
             const progressBarContainer = document.getElementById('progressBarContainer');
             const progressBar = document.getElementById('progressBar');
 
+            // Balance Details Modal Elements (YENİ)
+            const openBalanceDetailsModalBtn = document.getElementById('openBalanceDetailsModalBtn');
+            const balanceDetailsModal = document.getElementById('balanceDetailsModal');
+            const closeBalanceDetailsModalBtn = document.getElementById('closeBalanceDetailsModalBtn');
+            const detailCurrentBalance = document.getElementById('detailCurrentBalance');
+            const detailTotalEarned = document.getElementById('detailTotalEarned');
+            const detailLastEarnings = document.getElementById('detailLastEarnings');
+            const detailTotalWithdrawn = document.getElementById('detailTotalWithdrawn');
+            const detailProfileName = document.getElementById('detailProfileName');
+            const detailProfileUsername = document.getElementById('detailProfileUsername');
+            const detailProfileEmail = document.getElementById('detailProfileEmail');
+            const detailProfileRole = document.getElementById('detailProfileRole');
+
+
             // --- Veri Depolama (Sahte) ---
             let currentBalance = parseFloat(localStorage.getItem('codeMintBalance')) || 1000.00;
             let transactions = JSON.parse(localStorage.getItem('codeMintTransactions')) || [];
             let totalEarned = parseFloat(localStorage.getItem('codeMintTotalEarned')) || 0.00;
             let maxSingleEarned = parseFloat(localStorage.getItem('codeMintMaxSingleEarned')) || 0.00;
             let lastEarnedAmount = parseFloat(localStorage.getItem('codeMintLastEarnedAmount')) || 0.00;
+            let totalWithdrawn = parseFloat(localStorage.getItem('codeMintTotalWithdrawn')) || 0.00; // Yeni eklendi
             let activeProjects = parseInt(localStorage.getItem('codeMintActiveProjects')) || 3;
             let pendingBugs = parseInt(localStorage.getItem('codeMintPendingBugs')) || 0;
 
@@ -1060,8 +1153,9 @@
                 localStorage.setItem('codeMintBalance', currentBalance.toFixed(2));
                 localStorage.setItem('codeMintTransactions', JSON.stringify(transactions));
                 localStorage.setItem('codeMintTotalEarned', totalEarned.toFixed(2));
-                localStorage.setItem('codeMintMaxSingleEarned', maxSingleEarned.toFixed(2));
+                localStorage.setItem('codeMintMintMaxSingleEarned', maxSingleEarned.toFixed(2));
                 localStorage.setItem('codeMintLastEarnedAmount', lastEarnedAmount.toFixed(2));
+                localStorage.setItem('codeMintTotalWithdrawn', totalWithdrawn.toFixed(2)); // Yeni eklendi
                 localStorage.setItem('codeMintActiveProjects', activeProjects);
                 localStorage.setItem('codeMintPendingBugs', pendingBugs);
                 localStorage.setItem('codeMintUserProfile', JSON.stringify(userProfile));
@@ -1494,6 +1588,25 @@
                 addSoftwareModal.classList.remove('active');
             });
 
+            // Bakiye Detayları Modalı Açma (YENİ)
+            openBalanceDetailsModalBtn.addEventListener('click', () => {
+                detailCurrentBalance.textContent = `${currentBalance.toFixed(2)}₺`;
+                detailTotalEarned.textContent = `${totalEarned.toFixed(2)}₺`;
+                detailLastEarnings.textContent = `${lastEarnedAmount.toFixed(2)}₺`;
+                detailTotalWithdrawn.textContent = `${totalWithdrawn.toFixed(2)}₺`; // Total çekilen bakiyeyi göster
+                detailProfileName.textContent = userProfile.name;
+                detailProfileUsername.textContent = userProfile.username;
+                detailProfileEmail.textContent = userProfile.email;
+                detailProfileRole.textContent = userProfile.role; // Rolü de göster
+
+                balanceDetailsModal.classList.add('active');
+            });
+
+            // Bakiye Detayları Modalı Kapatma (YENİ)
+            closeBalanceDetailsModalBtn.addEventListener('click', () => {
+                balanceDetailsModal.classList.remove('active');
+            });
+
 
             window.addEventListener('click', (event) => {
                 if (event.target == withdrawModal) { withdrawModal.classList.remove('active'); }
@@ -1502,6 +1615,7 @@
                 if (event.target == supportModal) { supportModal.classList.remove('active'); }
                 if (event.target == profileEditModal) { profileEditModal.classList.remove('active'); }
                 if (event.target == addSoftwareModal) { addSoftwareModal.classList.remove('active'); }
+                if (event.target == balanceDetailsModal) { balanceDetailsModal.classList.remove('active'); } // Yeni eklendi
             });
 
             // Kart Numarası Formatlama
@@ -1547,6 +1661,7 @@
 
                     if (transferSuccess) {
                         currentBalance -= amount;
+                        totalWithdrawn += amount; // Çekilen bakiyeyi güncelle
                         if (currentBalance < 0) currentBalance = 0;
                         updateDashboard();
                         addTransaction('Bakiye Aktarımı', amount, 'Başarılı', `Kart No: **** ${enteredCardNumber.slice(-4)}`);
