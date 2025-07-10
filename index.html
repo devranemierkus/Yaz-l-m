@@ -3,1684 +3,716 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CodeMint - Geliştirici Kontrol Paneli</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>ChatNova Yönetim Paneli - Kritik Hata</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        /* CSS Değişkenleri */
+        /* CSS Başlangıcı */
         :root {
-            --primary-color: #28a745; /* Yeşil */
-            --primary-dark-color: #218838;
-            --secondary-color: #007bff; /* Mavi */
-            --secondary-dark-color: #0056b3;
-            --accent-color: #6c757d; /* Gri */
-            --accent-dark-color: #5a6268;
-            --background-light: #f8f9fa;
-            --background-dark: #e9ecef;
-            --card-background: #ffffff;
-            --text-color: #343a40;
-            --text-light-color: #6c757d;
-            --border-color: #dee2e6;
-            --shadow-light: rgba(0, 0, 0, 0.08);
-            --shadow-medium: rgba(0, 0, 0, 0.15);
-            --code-background: #282c34;
-            --code-text: #abb2bf;
-            --success-bg: #d4edda;
-            --success-text: #155724;
-            --error-bg: #f8d7da;
-            --error-text: #721c24;
-            --info-bg: #d1ecf1;
-            --info-text: #0c5460;
+            --primary-color: #5a67d8; /* Mor/Mavi */
+            --secondary-color: #4a5568; /* Koyu Gri Mavi */
+            --background-light: #f7fafc; /* Açık Gri Mavi */
+            --background-dark: #edf2f7; /* Daha Koyu Açık Gri */
+            --text-color: #2d3748; /* Koyu Gri */
+            --border-color: #e2e8f0; /* Açık Gri */
+            --widget-bg: #ffffff; /* Beyaz */
+            --critical-red: #e53e3e; /* Kırmızı */
+            --critical-bg: #fff5f5; /* Açık Kırmızı */
+            --warning-orange: #dd6b20; /* Turuncu */
+            --warning-bg: #fffaf0; /* Açık Turuncu */
+            --font-family-primary: 'Roboto', sans-serif;
+            --font-family-secondary: 'Montserrat', sans-serif;
         }
 
-        /* Genel Stil Ayarları */
         body {
-            font-family: 'Inter', sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            min-height: 100vh;
-            background: linear-gradient(135deg, var(--background-light) 0%, var(--background-dark) 100%);
+            font-family: var(--font-family-primary);
             margin: 0;
+            padding: 0;
+            display: flex;
+            min-height: 100vh;
+            background-color: var(--background-light);
             color: var(--text-color);
-            padding: 30px 20px;
-            box-sizing: border-box;
             line-height: 1.6;
-            overflow-x: hidden;
+            font-size: 16px;
+            overflow-x: hidden; /* Yatay kaydırmayı engelle */
         }
 
-        .container {
-            background-color: var(--card-background);
-            padding: 40px 50px;
-            border-radius: 20px;
-            box-shadow: 0 15px 40px var(--shadow-medium);
-            text-align: center;
-            width: 95%;
-            max-width: 1000px;
-            box-sizing: border-box;
-            border: 1px solid var(--border-color);
-            position: relative;
-            overflow: hidden;
-        }
-
-        /* Başlık ve Açıklama */
-        header {
-            margin-bottom: 40px;
-        }
-        header h1 {
-            color: var(--primary-color);
-            margin-bottom: 10px;
-            font-size: 3.8em;
-            font-weight: 700;
-            letter-spacing: -1.5px;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
-        }
-        header p {
-            color: var(--text-light-color);
-            font-size: 1.3em;
-            max-width: 700px;
-            margin: 0 auto;
-        }
-
-        /* Bölüm Başlıkları */
-        .section-title {
-            font-size: 2.2em;
-            color: var(--text-color);
-            margin-top: 50px;
-            margin-bottom: 30px;
-            padding-bottom: 18px;
-            border-bottom: 2px solid var(--border-color);
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            position: relative;
-        }
-        .section-title i {
-            color: var(--primary-color);
-            font-size: 1.2em;
-        }
-        .section-title::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 60px;
-            height: 4px;
-            background-color: var(--primary-color);
-            border-radius: 2px;
-        }
-
-        /* Bakiye Bölümü */
-        .balance-section {
-            background: linear-gradient(45deg, var(--primary-color) 0%, var(--primary-dark-color) 100%);
+        .sidebar {
+            width: 280px;
+            background-color: var(--secondary-color);
             color: white;
-            padding: 35px 50px;
-            border-radius: 15px;
-            margin-bottom: 50px;
+            padding: 30px 20px;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
             display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 35px;
-            box-shadow: 0 10px 25px rgba(40, 167, 69, 0.4);
-            animation: bounceIn 0.8s ease-out;
-            cursor: pointer; /* Tıklanabilir olduğunu belirtir */
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            flex-direction: column;
+            flex-shrink: 0; /* Küçülmesini engelle */
         }
-        .balance-section:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(40, 167, 69, 0.5);
+
+        .sidebar h2 {
+            text-align: center;
+            margin-bottom: 40px;
+            color: #fff;
+            font-weight: 700;
+            font-family: var(--font-family-secondary);
+            font-size: 1.8em;
+            letter-spacing: 1px;
         }
-        .balance-label {
-            font-size: 2em;
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar ul li {
+            margin-bottom: 15px;
+        }
+
+        .sidebar ul li a {
+            display: block;
+            padding: 12px 20px;
+            color: #cbd5e0;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: background-color 0.3s ease, color 0.3s ease;
             font-weight: 500;
             display: flex;
             align-items: center;
-            gap: 15px;
-            opacity: 0.9;
-        }
-        .balance-label i {
-            font-size: 1.5em;
-        }
-        .balance-amount {
-            font-size: 4.8em;
-            font-weight: 700;
-            letter-spacing: 3px;
-            text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.3);
         }
 
-        /* Kod Editörü */
-        .code-editor {
-            width: 100%;
-            height: 350px;
-            background-color: var(--code-background);
-            color: var(--code-text);
+        .sidebar ul li a i {
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+
+        .sidebar ul li a:hover,
+        .sidebar ul li a.active {
+            background-color: #2d3748;
+            color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .main-content {
+            flex-grow: 1;
+            padding: 40px;
+            background-color: var(--background-light);
+            display: flex;
+            flex-direction: column;
+            gap: 30px; /* Ana bölümler arasında boşluk */
+        }
+
+        header {
+            background-color: var(--widget-bg);
+            padding: 25px 35px;
             border-radius: 12px;
-            padding: 25px;
-            font-family: 'Fira Code', monospace;
-            font-size: 1.15em;
-            line-height: 1.8;
-            border: 1px solid #3a3f4a;
-            resize: vertical;
-            box-sizing: border-box;
-            margin-bottom: 35px;
-            overflow-y: auto;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            box-shadow: inset 0 4px 12px rgba(0, 0, 0, 0.4);
-            text-align: left;
-            transition: all 0.3s ease;
-        }
-        .code-editor:focus {
-            border-color: var(--primary-color);
-            box-shadow: inset 0 4px 12px rgba(0, 0, 0, 0.5), 0 0 0 3px rgba(40, 167, 69, 0.3);
-            outline: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px; /* Diğer içeriklerden ayır */
         }
 
-        /* Buton Izgarası */
-        .button-grid {
+        header h1 {
+            margin: 0;
+            color: var(--primary-color);
+            font-family: var(--font-family-secondary);
+            font-size: 2.2em;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .alert-section {
+            background-color: var(--critical-bg);
+            color: var(--critical-red);
+            padding: 25px 30px;
+            border-radius: 12px;
+            border: 2px solid var(--critical-red);
+            font-weight: 500;
+            line-height: 1.7;
+            box-shadow: 0 4px 15px rgba(229, 62, 62, 0.2);
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        .alert-section i {
+            font-size: 2.5em;
+            color: var(--critical-red);
+            flex-shrink: 0;
+        }
+
+        .alert-section h2 {
+            margin-top: 0;
+            color: var(--critical-red);
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            font-family: var(--font-family-secondary);
+        }
+
+        .alert-section p {
+            margin: 5px 0;
+            font-size: 1.1em;
+        }
+
+        .dashboard-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 25px;
-            margin-top: 35px;
-            margin-bottom: 25px;
+            margin-top: 10px; /* Uyarı altından biraz boşluk */
         }
 
-        /* Butonlar */
-        .btn {
-            padding: 20px 30px;
-            font-size: 1.2em;
-            border: none;
+        .widget {
+            background-color: var(--widget-bg);
+            padding: 25px;
             border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            font-weight: 600;
-            box-shadow: 0 5px 15px var(--shadow-light);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+            text-align: center;
             display: flex;
+            flex-direction: column;
+            justify-content: space-between;
             align-items: center;
-            justify-content: center;
-            gap: 12px;
-            text-decoration: none;
+            transition: transform 0.2s ease;
         }
-        .btn i {
+
+        .widget:hover {
+            transform: translateY(-5px);
+        }
+
+        .widget h3 {
+            margin-top: 0;
+            color: var(--secondary-color);
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            font-family: var(--font-family-secondary);
+        }
+
+        .widget p {
+            font-size: 2.8em;
+            margin: 0;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .widget .status-label {
             font-size: 1.4em;
-        }
-
-        .btn-primary {
-            background-color: var(--primary-color);
-            color: white;
-        }
-        .btn-primary:hover {
-            background-color: var(--primary-dark-color);
-            transform: translateY(-7px);
-            box-shadow: 0 12px 25px var(--shadow-medium);
-        }
-        .btn-secondary {
-            background-color: var(--secondary-color);
-            color: white;
-        }
-        .btn-secondary:hover {
-            background-color: var(--secondary-dark-color);
-            transform: translateY(-7px);
-            box-shadow: 0 12px 25px var(--shadow-medium);
-        }
-        .btn-accent {
-            background-color: var(--accent-color);
-            color: white;
-        }
-        .btn-accent:hover {
-            background-color: var(--accent-dark-color);
-            transform: translateY(-7px);
-            box-shadow: 0 12px 25px var(--shadow-medium);
-        }
-        .btn-danger {
-            background-color: #dc3545;
-            color: white;
-        }
-        .btn-danger:hover {
-            background-color: #c82333;
-            transform: translateY(-7px);
-            box-shadow: 0 12px 25px var(--shadow-medium);
-        }
-
-        /* Buton Yükleme Durumu */
-        .btn.loading {
-            pointer-events: none;
-            opacity: 0.7;
-            cursor: not-allowed;
-        }
-        .btn.loading .spinner {
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            border-top: 3px solid #fff;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            animation: spin 1s linear infinite;
-            margin-right: 10px;
+            font-weight: 700;
+            margin-top: 10px;
+            padding: 5px 15px;
+            border-radius: 20px;
             display: inline-block;
         }
-        .btn.loading i {
-            display: none;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+
+        .status-offline {
+            color: var(--critical-red);
+            background-color: rgba(229, 62, 62, 0.1);
         }
 
-        /* Mesaj Kutuları */
-        .message {
-            margin-top: 40px;
-            font-size: 1.2em;
-            font-weight: 500;
-            padding: 20px 30px;
+        .section-container {
+            background-color: var(--widget-bg);
+            padding: 30px;
             border-radius: 12px;
-            display: none;
-            opacity: 0;
-            transition: opacity 0.5s ease-in-out;
-            animation: fadeInOut 5s forwards;
-            position: relative;
-            z-index: 50;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-        .error-message {
-            background-color: var(--error-bg);
-            color: var(--error-text);
-            border: 1px solid darken(var(--error-bg), 10%);
-        }
-        .success-message {
-            background-color: var(--success-bg);
-            color: var(--success-text);
-            border: 1px solid darken(var(--success-bg), 10%);
-        }
-        .info-message {
-            background-color: var(--info-bg);
-            color: var(--info-text);
-            border: 1px solid darken(var(--info-bg), 10%);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+            margin-top: 20px; /* Bölümler arası boşluk */
         }
 
-        @keyframes fadeInOut {
-            0% { opacity: 0; transform: translateY(20px); }
-            10% { opacity: 1; transform: translateY(0); }
-            90% { opacity: 1; transform: translateY(0); }
-            100% { opacity: 0; transform: translateY(-20px); display: none; }
+        .section-container h2 {
+            margin-top: 0;
+            color: var(--secondary-color);
+            margin-bottom: 25px;
+            font-family: var(--font-family-secondary);
+            font-size: 1.6em;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
         }
 
-        /* Modal Stilleri */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.6);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.4s ease-in-out;
+        .action-buttons-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            justify-content: center; /* Butonları ortala */
         }
-        .modal.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
-        .modal-content {
-            background-color: var(--card-background);
-            padding: 40px 50px;
-            border-radius: 18px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.5);
-            width: 90%;
-            max-width: 600px;
-            text-align: center;
-            transform: translateY(-40px);
-            transition: transform 0.4s ease-in-out;
-            position: relative;
-        }
-        .modal.active .modal-content {
-            transform: translateY(0);
-        }
-        .close-button {
-            color: #aaa;
-            font-size: 40px;
-            font-weight: bold;
-            cursor: pointer;
-            position: absolute;
-            top: 15px;
-            right: 25px;
-            transition: color 0.3s;
-        }
-        .close-button:hover,
-        .close-button:focus {
-            color: var(--primary-color);
-        }
-        .modal-title {
-            font-size: 2.8em;
-            color: var(--primary-color);
-            margin-bottom: 30px;
-            font-weight: 700;
+
+        .btn {
+            padding: 14px 25px;
+            border: none;
+            border-radius: 8px;
+            background-color: var(--primary-color);
+            color: white;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: not-allowed; /* Devre dışı bırakıldı */
+            transition: background-color 0.3s ease, opacity 0.3s ease;
+            opacity: 0.5; /* Devre dışı olduğunu belli et */
             display: flex;
             align-items: center;
             justify-content: center;
+            gap: 8px;
+            pointer-events: none; /* Tamamen tıklanamaz hale getir */
+        }
+
+        .btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+        
+        .btn.critical-action {
+            background-color: var(--critical-red);
+        }
+
+        .btn.critical-action:disabled {
+            background-color: #ef9a9a; /* Daha açık kırmızı */
+        }
+
+
+        .log-entry {
+            background-color: var(--background-dark);
+            border-left: 5px solid var(--border-color);
+            margin-bottom: 12px;
+            padding: 15px 20px;
+            border-radius: 6px;
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+            font-size: 0.95em;
+            color: #4a5568;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+            white-space: pre-wrap; /* Uzun metinlerin yeni satıra geçmesini sağlar */
+            word-break: break-word; /* Kelimeleri kırar */
+        }
+
+        .log-entry.critical-log {
+            border-color: var(--critical-red);
+            background-color: var(--critical-bg);
+            color: var(--critical-red);
+            font-weight: 600;
+        }
+        .log-entry.warning-log {
+            border-color: var(--warning-orange);
+            background-color: var(--warning-bg);
+            color: var(--warning-orange);
+            font-weight: 600;
+        }
+        .log-entry.info-log {
+            border-color: var(--primary-color);
+            background-color: rgba(90, 103, 216, 0.05);
+            color: var(--primary-color);
+        }
+
+        .settings-form label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--secondary-color);
+        }
+
+        .settings-form input[type="text"],
+        .settings-form textarea {
+            width: calc(100% - 24px);
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background-color: var(--background-light);
+            color: var(--text-color);
+            font-size: 1em;
+        }
+
+        .settings-form textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .settings-form .form-group {
+            margin-bottom: 25px;
+            padding: 15px;
+            border: 1px dashed var(--border-color);
+            border-radius: 8px;
+            background-color: var(--background-dark);
+        }
+
+        .settings-form .form-group h3 {
+            margin-top: 0;
+            color: var(--primary-color);
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 5px;
+        }
+        
+        .user-list {
+            list-style: none;
+            padding: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 15px;
         }
-        .modal-title i {
-            font-size: 1.2em;
-        }
-        .modal-body p {
-            font-size: 1.2em;
-            line-height: 1.8;
-            color: var(--text-light-color);
-            margin-bottom: 30px;
-        }
-        .modal-body label {
-            display: block;
-            margin-bottom: 15px;
-            font-weight: 600;
-            color: var(--text-color);
-            font-size: 1.2em;
-            text-align: left;
-        }
-        .modal-body input[type="text"], .modal-body input[type="number"], .modal-body textarea, .modal-body select {
-            width: calc(100% - 28px);
-            padding: 18px;
-            margin-bottom: 30px;
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            font-size: 1.15em;
-            box-sizing: border-box;
-            transition: border-color 0.3s, box-shadow 0.3s;
-        }
-        .modal-body input:focus, .modal-body textarea:focus, .modal-body select:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.2);
-            outline: none;
-        }
-        .modal-body .btn {
-            width: 100%;
-            margin-top: 20px;
-            padding: 18px;
-        }
 
-        /* İşlem Geçmişi Listesi */
-        #transactionList {
-            list-style-type: none;
-            padding: 0;
-            max-height: 300px;
-            overflow-y: auto;
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
+        .user-card {
+            background-color: var(--background-dark);
             padding: 15px;
-            background-color: var(--background-light);
-        }
-        #transactionList li {
-            background-color: var(--card-background);
-            margin-bottom: 15px;
-            padding: 15px 20px;
-            border-radius: 10px;
-            border: 1px solid var(--border-color);
-            text-align: left;
-            box-shadow: 0 2px 8px var(--shadow-light);
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-        }
-        #transactionList li strong {
-            color: var(--text-color);
-            font-weight: 600;
-        }
-        #transactionList li span {
-            font-weight: 500;
-        }
-        .transaction-status-success { color: var(--primary-dark-color); }
-        .transaction-status-fail { color: #dc3545; }
-        .transaction-status-info { color: var(--secondary-dark-color); }
-
-        /* Gösterge Kartları */
-        .dashboard-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
-            margin-top: 30px;
-        }
-        .card {
-            background-color: var(--card-background);
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 8px 20px var(--shadow-light);
-            text-align: left;
-            border: 1px solid var(--border-color);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 25px var(--shadow-medium);
-        }
-        .card-icon {
-            font-size: 2.5em;
-            color: var(--primary-color);
-            margin-bottom: 15px;
-        }
-        .card-title {
-            font-size: 1.6em;
-            font-weight: 600;
-            color: var(--text-color);
-            margin-bottom: 10px;
-        }
-        .card-value {
-            font-size: 2.2em;
-            font-weight: 700;
-            color: var(--primary-dark-color);
-        }
-        .card-description {
-            font-size: 0.95em;
-            color: var(--text-light-color);
-            margin-top: 10px;
-        }
-
-        /* Progress Bar */
-        .progress-container {
-            width: 100%;
-            background-color: var(--background-dark);
             border-radius: 8px;
-            margin-top: 20px;
-            overflow: hidden;
-            height: 20px;
-            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
-            display: none;
-        }
-        .progress-bar {
-            height: 100%;
-            width: 0%;
-            background-color: var(--primary-color);
-            border-radius: 8px;
-            text-align: center;
-            color: white;
-            line-height: 20px;
-            font-size: 0.8em;
-            transition: width 0.4s ease-in-out;
-        }
-
-        /* Profil ve Yazılımlarım bölümleri */
-        .profile-section, .software-section {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 30px;
-            text-align: left;
-        }
-        .profile-card {
-            background-color: var(--card-background);
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 8px 20px var(--shadow-light);
             border: 1px solid var(--border-color);
             display: flex;
-            flex-direction: column;
             align-items: center;
-            gap: 20px;
+            gap: 15px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
         }
-        .profile-avatar {
-            width: 120px;
-            height: 120px;
+
+        .user-card .avatar {
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
-            background-color: var(--background-dark);
+            background-color: var(--primary-color);
+            color: white;
             display: flex;
-            justify-content: center;
             align-items: center;
-            font-size: 3em;
-            color: var(--accent-color);
-            border: 4px solid var(--primary-color);
-            box-shadow: 0 0 0 5px rgba(40, 167, 69, 0.2);
-        }
-        .profile-info {
-            width: 100%;
-            max-width: 400px;
-            text-align: center;
-        }
-        .profile-info h3 {
-            font-size: 2em;
-            margin-bottom: 10px;
-            color: var(--text-color);
-        }
-        .profile-info p {
-            font-size: 1.1em;
-            color: var(--text-light-color);
-            margin-bottom: 8px;
-        }
-        .profile-edit-btn {
-            margin-top: 20px;
-            width: fit-content;
-            padding: 10px 25px;
-            font-size: 1.1em;
-        }
-
-        .software-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
-        }
-        .software-item {
-            background-color: var(--card-background);
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px var(--shadow-light);
-            border: 1px solid var(--border-color);
-            text-align: left;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .software-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px var(--shadow-medium);
-        }
-        .software-icon {
-            font-size: 2.2em;
-            color: var(--secondary-color);
-            margin-bottom: 15px;
-        }
-        .software-title {
+            justify-content: center;
             font-size: 1.5em;
-            font-weight: 600;
-            color: var(--text-color);
-            margin-bottom: 10px;
-        }
-        .software-status {
-            font-size: 0.95em;
-            font-weight: 500;
-            padding: 5px 10px;
-            border-radius: 5px;
-            display: inline-block;
-            margin-bottom: 10px;
-        }
-        .status-active { background-color: #e6ffe6; color: var(--primary-dark-color); }
-        .status-development { background-color: #e0f2f7; color: var(--secondary-dark-color); }
-        .status-maintenance { background-color: #fff3e0; color: orange; }
-        .status-danger { background-color: #f8d7da; color: #dc3545; }
-        .software-description {
-            font-size: 1em;
-            color: var(--text-light-color);
-            margin-bottom: 15px;
-            min-height: 45px; /* Minimum yükseklik ile daha düzgün görünüm */
-        }
-        .software-actions .btn {
-            font-size: 0.9em;
-            padding: 10px 15px;
-            min-width: unset;
-        }
-        .software-actions .btn-group {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
+            font-weight: 700;
+            flex-shrink: 0;
         }
 
-        /* Responsive Ayarlamalar */
-        @media (max-width: 992px) {
-            .container {
+        .user-card .user-info h4 {
+            margin: 0 0 5px 0;
+            color: var(--primary-color);
+            font-size: 1.1em;
+        }
+
+        .user-card .user-info p {
+            margin: 0;
+            font-size: 0.9em;
+            color: #6a737d;
+        }
+
+        /* Responsive Tasarım */
+        @media (max-width: 1024px) {
+            .main-content {
                 padding: 30px;
             }
             header h1 {
-                font-size: 3em;
-            }
-            .balance-amount {
-                font-size: 4em;
-            }
-            .section-title {
                 font-size: 1.8em;
             }
-            .button-grid {
-                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            .alert-section h2 {
+                font-size: 1.5em;
             }
-            .btn {
-                font-size: 1.1em;
-                padding: 18px 25px;
+            .dashboard-grid {
+                grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             }
-            .modal-content {
-                padding: 30px 40px;
-            }
-            .modal-title {
+            .widget p {
                 font-size: 2.2em;
             }
-            .software-list {
-                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            .btn {
+                font-size: 1em;
+                padding: 12px 20px;
             }
         }
 
         @media (max-width: 768px) {
             body {
-                padding: 20px 10px;
+                flex-direction: column;
             }
-            .container {
-                padding: 25px 20px;
-                border-radius: 15px;
+            .sidebar {
+                width: 100%;
+                height: auto;
+                padding: 20px 15px;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             }
-            header h1 {
-                font-size: 2.5em;
-            }
-            header p {
-                font-size: 1.1em;
-            }
-            .balance-label {
-                font-size: 1.6em;
-            }
-            .balance-amount {
-                font-size: 3.5em;
-            }
-            .section-title {
-                font-size: 1.6em;
-                margin-top: 40px;
+            .sidebar h2 {
                 margin-bottom: 20px;
             }
-            .code-editor {
-                height: 250px;
-                font-size: 1em;
-                padding: 18px;
+            .sidebar ul {
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
             }
-            .button-grid {
-                grid-template-columns: 1fr;
-                gap: 15px;
+            .sidebar ul li {
+                margin-bottom: 0;
+            }
+            .sidebar ul li a {
+                padding: 10px 15px;
+                font-size: 0.9em;
+            }
+            .sidebar ul li a i {
+                margin-right: 5px;
+                font-size: 1em;
+            }
+            .main-content {
+                padding: 25px 20px;
+            }
+            header {
+                padding: 20px 25px;
+            }
+            header h1 {
+                font-size: 1.6em;
+            }
+            .alert-section {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            .alert-section i {
+                margin-bottom: 10px;
+            }
+            .dashboard-grid {
+                grid-template-columns: 1fr; /* Tek sütun */
+            }
+            .action-buttons-grid {
+                grid-template-columns: 1fr; /* Tek sütun */
             }
             .btn {
-                font-size: 1em;
-                padding: 15px 20px;
+                width: 100%;
             }
-            .message {
-                font-size: 1.05em;
-                padding: 15px 20px;
-            }
-            .modal-content {
-                padding: 25px 30px;
-            }
-            .modal-title {
-                font-size: 2em;
-            }
-            .modal-body input, .modal-body textarea {
-                padding: 15px;
-            }
-            .dashboard-cards, .software-list {
+            .user-list {
                 grid-template-columns: 1fr;
             }
-            .profile-avatar {
-                width: 100px;
-                height: 100px;
-                font-size: 2.5em;
+        }
+
+        @media (max-width: 480px) {
+            .main-content {
+                padding: 15px;
             }
-            .profile-info h3 {
-                font-size: 1.8em;
+            header h1 {
+                font-size: 1.4em;
             }
-            .profile-info p {
+            .alert-section h2 {
+                font-size: 1.4em;
+            }
+            .alert-section p {
                 font-size: 1em;
             }
+            .widget h3 {
+                font-size: 1em;
+            }
+            .widget p {
+                font-size: 2em;
+            }
+            .btn {
+                font-size: 0.9em;
+                padding: 10px 15px;
+            }
         }
-
-        /* Bakiye Detayları Modalı */
-        .balance-details-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 0;
-            border-bottom: 1px dashed var(--border-color);
-        }
-        .balance-details-row:last-child {
-            border-bottom: none;
-        }
-        .balance-details-label {
-            font-weight: 600;
-            color: var(--text-color);
-            font-size: 1.1em;
-        }
-        .balance-details-value {
-            font-weight: 500;
-            color: var(--primary-dark-color);
-            font-size: 1.1em;
-        }
-        .balance-details-value.text-accent {
-            color: var(--accent-color);
-        }
+        /* CSS Sonu */
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-    <div class="container">
+    <div class="sidebar">
+        <h2>ChatNova</h2>
+        <ul>
+            <li><a href="#" class="active" data-section="overview"><i class="fas fa-tachometer-alt"></i> Genel Bakış</a></li>
+            <li><a href="#" data-section="settings"><i class="fas fa-cogs"></i> Ayarlar</a></li>
+            <li><a href="#" data-section="users"><i class="fas fa-users"></i> Kullanıcılar</a></li>
+            <li><a href="#" data-section="logs"><i class="fas fa-clipboard-list"></i> Loglar</a></li>
+            <li><a href="#" data-section="support"><i class="fas fa-headset"></i> Destek</a></li>
+        </ul>
+    </div>
+    <div class="main-content">
         <header>
-            <h1>CodeMint</h1>
-            <p>Geliştirme süreçlerinizi yönetin, projelerinizden kazanç sağlayın ve finansal akışınızı takip edin.</p>
+            <h1>Yönetim Paneli</h1>
         </header>
 
-        <div class="balance-section" id="openBalanceDetailsModalBtn">
-            <span class="balance-label"><i class="fas fa-wallet"></i> Mevcut Bakiyeniz:</span>
-            <span class="balance-amount" id="balanceDisplay">1000.00₺</span>
-        </div>
-
-        <div class="dashboard-cards">
-            <div class="card">
-                <div class="card-icon"><i class="fas fa-project-diagram"></i></div>
-                <div class="card-title">Aktif Projeler</div>
-                <div class="card-value" id="activeProjectsCount">3</div>
-                <div class="card-description">Şu anda üzerinde çalıştığınız proje sayısı.</div>
-            </div>
-            <div class="card">
-                <div class="card-icon"><i class="fas fa-chart-line"></i></div>
-                <div class="card-title">Son Kazanç</div>
-                <div class="card-value" id="lastEarnings">--₺</div>
-                <div class="card-description">Son kod çalıştırmanızdan elde edilen gelir.</div>
-            </div>
-            <div class="card">
-                <div class="card-icon"><i class="fas fa-bug"></i></div>
-                <div class="card-title">Bekleyen Hatalar</div>
-                <div class="card-value" id="pendingBugs">0</div>
-                <div class="card-description">Sistemde tespit edilen ve düzeltilmeyi bekleyen hata sayısı.</div>
-            </div>
-        </div>
-
-        <div class="section-title"><i class="fas fa-user-circle"></i> Geliştirici Profili</div>
-        <div class="profile-section">
-            <div class="profile-card">
-                <div class="profile-avatar">
-                    <i class="fas fa-user-tie"></i>
+        <div id="overview-section" class="content-section active-section">
+            <div class="alert-section">
+                <i class="fas fa-exclamation-triangle"></i>
+                <div>
+                    <h2>KRİTİK HATA: ChatNova Botu Çalışmıyor!</h2>
+                    <p>ChatNova botu, **geri döndürülemez bir sistem çöküşü** ve **tüm çekirdek dosyalarının silinmesi** nedeniyle tamamen çalışmayı durdurmuştur. Bu durum, botun tüm işlevselliğinin, sunucu bağlantılarının ve veri erişiminin kesildiği anlamına gelmektedir.</p>
+                    <p><strong>Son Bilinen Durum:</strong> **Çevrimdışı (Kalıcı Hata)**</p>
+                    <p><strong>Tespit Edilen Hata Kodu:</strong> `CRITICAL_CORE_FAILURE_0x00A`</p>
+                    <p><strong>Acil Eylem Gerekliliği:</strong> Hiçbir işlem yapılamaz. Botun yeniden dağıtılması veya onarılması için kapsamlı manuel müdahale gereklidir. Otomatik kurtarma mümkün değildir.</p>
                 </div>
-                <div class="profile-info">
-                    <h3 id="profileName">Geliştirici Adı Soyadı</h3>
-                    <p><strong>Kullanıcı Adı:</strong> <span id="profileUsername">codemint_dev</span></p>
-                    <p><strong>E-posta:</strong> <span id="profileEmail">dev@codemint.com</span></p>
-                    <p><strong>Rol:</strong> Kıdemli Yazılım Mühendisi</p>
-                    <p><strong>Katılım Tarihi:</strong> <span id="profileJoinDate">01.01.2023</span></p>
+            </div>
+
+            <div class="dashboard-grid">
+                <div class="widget">
+                    <h3>Bot Durumu</h3>
+                    <p class="status-label status-offline">Çevrimdışı</p>
                 </div>
-                <button class="btn btn-secondary profile-edit-btn" id="openProfileEditModalBtn"><i class="fas fa-edit"></i> Profili Düzenle</button>
+                <div class="widget">
+                    <h3>Sunucu Sayısı</h3>
+                    <p>0</p>
+                </div>
+                <div class="widget">
+                    <h3>Toplam Kullanıcı</h3>
+                    <p>0</p>
+                </div>
+                <div class="widget">
+                    <h3>Komut Kullanımı (Son 24s)</h3>
+                    <p>0</p>
+                </div>
+                <div class="widget">
+                    <h3>API Yanıt Süresi</h3>
+                    <p>N/A</p>
+                </div>
+                <div class="widget">
+                    <h3>Hata Oranı (%)</h3>
+                    <p>100%</p>
+                </div>
+            </div>
+
+            <div class="section-container">
+                <h2>Hızlı İşlemler</h2>
+                <p>Bot çalışmadığı için aşağıdaki işlemler devre dışıdır.</p>
+                <div class="action-buttons-grid">
+                    <button class="btn" disabled><i class="fas fa-play"></i> Botu Başlat</button>
+                    <button class="btn" disabled><i class="fas fa-stop"></i> Botu Durdur</button>
+                    <button class="btn" disabled><i class="fas fa-redo"></i> Yeniden Başlat</button>
+                    <button class="btn" disabled><i class="fas fa-database"></i> Veritabanı Yedekle</button>
+                    <button class="btn critical-action" disabled><i class="fas fa-trash-alt"></i> Botu Sıfırla (Kalıcı)</button>
+                    <button class="btn" disabled><i class="fas fa-cloud-upload-alt"></i> Güncelleme Kontrolü</button>
+                </div>
             </div>
         </div>
 
-        <div class="section-title"><i class="fas fa-th-large"></i> Yazılımlarım</div>
-        <div class="software-section">
-            <div class="software-list" id="softwareList">
-                <div class="software-item">
-                    <div class="software-icon"><i class="fas fa-robot"></i></div>
-                    <div class="software-title">AI Chatbot Entegrasyonu</div>
-                    <span class="software-status status-active">Aktif</span>
-                    <p class="software-description">Müşteri hizmetleri için yapay zeka destekli sohbet botu modülü.</p>
-                    <div class="software-actions btn-group">
-                        <button class="btn btn-primary"><i class="fas fa-chart-line"></i> Performans</button>
-                        <button class="btn btn-accent"><i class="fas fa-cog"></i> Ayarlar</button>
+        <div id="settings-section" class="content-section">
+            <div class="section-container">
+                <h2>Genel Ayarlar</h2>
+                <p>Botunuz çalışmadığı için bu ayarların hiçbiri şu anda etkili değildir ve değiştirilemez.</p>
+                <form class="settings-form">
+                    <div class="form-group">
+                        <h3>Genel Yapılandırma</h3>
+                        <label for="botName">Bot Adı:</label>
+                        <input type="text" id="botName" value="ChatNova (Devre Dışı)" disabled>
+
+                        <label for="prefix">Komut Öneki:</label>
+                        <input type="text" id="prefix" value="!" disabled>
+
+                        <label for="statusMessage">Bot Durum Mesajı:</label>
+                        <input type="text" id="statusMessage" value="Kritik Hata: Çevrimdışı" disabled>
                     </div>
-                </div>
-                <div class="software-item">
-                    <div class="software-icon"><i class="fas fa-lock"></i></div>
-                    <div class="software-title">Güvenli Veritabanı Modülü</div>
-                    <span class="software-status status-maintenance">Bakımda</span>
-                    <p class="software-description">Uygulama verilerinin güvenli depolanması ve şifrelenmesi.</p>
-                    <div class="software-actions btn-group">
-                        <button class="btn btn-primary"><i class="fas fa-wrench"></i> Onar</button>
-                        <button class="btn btn-accent"><i class="fas fa-file-alt"></i> Döküman</button>
+
+                    <div class="form-group">
+                        <h3>Modül Yönetimi</h3>
+                        <label for="modules">Aktif Modüller (Virgülle Ayrılmış):</label>
+                        <textarea id="modules" disabled>Hoş Geldin, Moderasyon, Eğlence (Tümü Yüklenemedi)</textarea>
+                        <p class="help-text">Bot çalışmadığı için modüllerin durumu algılanamıyor.</p>
                     </div>
-                </div>
-                <div class="software-item">
-                    <div class="software-icon"><i class="fas fa-truck-loading"></i></div>
-                    <div class="software-title">Lojistik Takip Sistemi</div>
-                    <span class="software-status status-development">Geliştirmede</span>
-                    <p class="software-description">Gerçek zamanlı kargo takibi ve rota optimizasyonu.</p>
-                    <div class="software-actions btn-group">
-                        <button class="btn btn-primary"><i class="fas fa-code"></i> Kodu Düzenle</button>
-                        <button class="btn btn-danger"><i class="fas fa-times-circle"></i> Durdur</button>
+
+                    <div class="form-group">
+                        <h3>Geliştirici Ayarları</h3>
+                        <label for="apiToken">API Erişim Tokenı:</label>
+                        <input type="text" id="apiToken" value="******************** (Geçersiz)" disabled>
+                        <p class="help-text">Bu token şu an için geçersizdir ve bağlantı kurulamıyor.</p>
                     </div>
-                </div>
-            </div>
-             <button class="btn btn-secondary" style="margin-top: 30px;" id="addNewSoftwareBtn"><i class="fas fa-plus-circle"></i> Yeni Yazılım Ekle</button>
-        </div>
 
-
-        <div class="section-title"><i class="fas fa-code-branch"></i> Kod Geliştirme Ortamı</div>
-        <div class="code-editor" contenteditable="true" id="codeEditor">
-            // CodeMint'e hoş geldiniz! Burası yaratıcılığınızı paraya dönüştüreceğiniz yer.
-            // Yeni özellikler yazarak, bugları düzelterek ve performans iyileştirmeleri yaparak kazancınızı artırabilirsiniz.
-
-            function deployNewFeature(featureName) {
-                console.log(`'${featureName}' özelliği devreye alınıyor...`);
-                // Sunucuya dağıtım işlemleri simüle ediliyor
-                return true;
-            }
-
-            class AI_Code_Assistant {
-                constructor() {
-                    this.suggestionsEnabled = true;
-                }
-                provideRefactoringSuggestions(codeSnippet) {
-                    // Yapay zeka destekli kod iyileştirmeleri
-                    console.log("Kod iyileştirme önerileri oluşturuluyor...");
-                    return "Potansiyel Optimizasyon: Fonksiyonları daha modüler hale getirin.";
-                }
-            }
-
-            // Yeni bir özellik üzerinde çalışıyorum: Kullanıcı Profilleri
-            const createUserProfile = (userId, data) => {
-                // Veritabanı işlemleri
-                console.log(`Kullanıcı ${userId} profili oluşturuldu.`);
-                return { status: 'success', data: { id: userId, ...data } };
-            };
-        </div>
-
-        <div class="button-grid">
-            <button class="btn btn-primary" id="runCodeBtn"><i class="fas fa-play"></i> Kodu Çalıştır & Kazanç Hesapla</button>
-            <button class="btn btn-secondary" id="downloadProjectBtn"><i class="fas fa-download"></i> Proje Dosyalarını İndir</button>
-            <button class="btn btn-accent" id="deployUpdateBtn"><i class="fas fa-cloud-upload-alt"></i> Yazılımı Güncelle</button>
-            <button class="btn btn-danger" id="viewLogsBtn"><i class="fas fa-bug"></i> Hata Kayıtlarını Görüntüle</button>
-        </div>
-        <div class="progress-container" id="progressBarContainer">
-            <div class="progress-bar" id="progressBar"></div>
-        </div>
-
-        <div class="section-title"><i class="fas fa-dollar-sign"></i> Finansal İşlemler</div>
-        <div class="button-grid">
-            <button class="btn btn-primary" id="openWithdrawModalBtn"><i class="fas fa-credit-card"></i> Bakiyeyi Karta Aktar</button>
-            <button class="btn btn-secondary" id="viewTransactionsBtn"><i class="fas fa-history"></i> İşlem Geçmişi</button>
-            <button class="btn btn-accent" id="viewReportsBtn"><i class="fas fa-chart-bar"></i> Kazanç Raporları</button>
-            <button class="btn btn-danger" id="contactSupportBtn"><i class="fas fa-headset"></i> Destek ile İletişim</button>
-        </div>
-
-        <div class="message error-message" id="errorMessage"></div>
-        <div class="message success-message" id="successMessage"></div>
-        <div class="message info-message" id="infoMessage"></div>
-    </div>
-
-    <div id="withdrawModal" class="modal">
-        <div class="modal-content">
-            <span class="close-button" id="closeWithdrawModalBtn">&times;</span>
-            <h2 class="modal-title"><i class="fas fa-university"></i> Bakiyeyi Karta Aktar</h2>
-            <div class="modal-body">
-                <p>Mevcut bakiyenizi güvenle banka kartınıza aktarabilirsiniz. İşlem, bankanızın yoğunluğuna göre 1-3 iş günü içinde tamamlanacaktır.</p>
-                <label for="cardNumber">Banka Kartı Numarası:</label>
-                <input type="text" id="cardNumber" placeholder="xxxx xxxx xxxx xxxx" maxlength="19">
-                <label for="cardHolderName">Kart Sahibi Adı Soyadı:</label>
-                <input type="text" id="cardHolderName" placeholder="Ad Soyad">
-                <label for="amountToWithdraw">Aktarılacak Tutar (₺):</label>
-                <input type="number" id="amountToWithdraw" placeholder="Örn: 500" value="">
-                <button class="btn btn-primary" id="confirmWithdrawBtn"><i class="fas fa-check-circle"></i> Aktarımı Onayla</button>
+                    <button type="submit" class="btn" disabled><i class="fas fa-save"></i> Ayarları Kaydet</button>
+                </form>
             </div>
         </div>
-    </div>
 
-    <div id="transactionsModal" class="modal">
-        <div class="modal-content">
-            <span class="close-button" id="closeTransactionsModalBtn">&times;</span>
-            <h2 class="modal-title"><i class="fas fa-history"></i> İşlem Geçmişi</h2>
-            <div class="modal-body">
-                <p id="noTransactionsMessage">Henüz bir işlem geçmişiniz bulunmamaktadır.</p>
-                <ul id="transactionList">
-                    </ul>
+        <div id="users-section" class="content-section">
+            <div class="section-container">
+                <h2>Kullanıcı Yönetimi</h2>
+                <p>Botunuz aktif olmadığı için kullanıcı verileri alınamıyor ve yönetilemiyor.</p>
+                <ul class="user-list">
+                    <li class="user-card">
+                        <div class="avatar">?</div>
+                        <div class="user-info">
+                            <h4>Kullanıcı 1 (Veri Yok)</h4>
+                            <p>ID: N/A</p>
+                            <p>Rol: Bilinmiyor</p>
+                        </div>
+                    </li>
+                    <li class="user-card">
+                        <div class="avatar">?</div>
+                        <div class="user-info">
+                            <h4>Kullanıcı 2 (Veri Yok)</h4>
+                            <p>ID: N/A</p>
+                            <p>Rol: Bilinmiyor</p>
+                        </div>
+                    </li>
+                    <li class="user-card">
+                        <div class="avatar">?</div>
+                        <div class="user-info">
+                            <h4>Kullanıcı 3 (Veri Yok)</h4>
+                            <p>ID: N/A</p>
+                            <p>Rol: Bilinmiyor</p>
+                        </div>
+                    </li>
+                </ul>
+                <p style="text-align: center; margin-top: 20px; font-style: italic; color: #718096;">Daha fazla kullanıcı bilgisi bulunamadı.</p>
             </div>
         </div>
-    </div>
 
-    <div id="reportsModal" class="modal">
-        <div class="modal-content">
-            <span class="close-button" id="closeReportsModalBtn">&times;</span>
-            <h2 class="modal-title"><i class="fas fa-chart-bar"></i> Kazanç Raporları</h2>
-            <div class="modal-body">
-                <p>Burada detaylı kazanç raporlarınızı ve analizlerinizi görüntüleyebilirsiniz. (Bu bölüm simülasyon amaçlıdır.)</p>
-                <p><strong>Toplam Kazanılan:</strong> <span id="totalEarnedReport">0.00₺</span></p>
-                <p><strong>Ortalama Günlük Kazanç:</strong> <span id="avgDailyEarnedReport">0.00₺</span></p>
-                <p><strong>En Yüksek Tek İşlem Kazancı:</strong> <span id="maxSingleEarnedReport">0.00₺</span></p>
-                <p style="margin-top: 30px; font-style: italic; color: var(--text-light-color);">Gerçek bir uygulamada burada interaktif grafikler ve detaylı tablolar bulunurdu.</p>
+        <div id="logs-section" class="content-section">
+            <div class="section-container">
+                <h2>Sistem Logları</h2>
+                <p>Aşağıda botun çökmesine neden olan son bilinen ve kritik log girdileri listelenmiştir. Bu loglar, sorunun kökenine dair önemli ipuçları içermektedir.</p>
+                <div id="logList">
+                    <div class="log-entry critical-log">[2025-07-10 19:29:05] FATAL ERROR: Core process `main.js` terminated unexpectedly. Exit code: 139 (Segmentation Fault).</div>
+                    <div class="log-entry critical-log">[2025-07-10 19:28:58] CRITICAL: Database connection lost. Error: `ECONNREFUSED` to `localhost:5432`. No such file or directory.</div>
+                    <div class="log-entry warning-log">[2025-07-10 19:28:55] WARNING: File system corruption detected in `/app/ChatNova/data/`. Integrity check failed.</div>
+                    <div class="log-entry critical-log">[2025-07-10 19:28:50] ERROR: Essential file `config.json` not found or unreadable. Bot cannot initialize.</div>
+                    <div class="log-entry critical-log">[2025-07-10 19:28:45] SYSTEM ALERT: Automated cleanup script triggered. Deleting temporary files... (Unexpectedly deleted core files).</div>
+                    <div class="log-entry info-log">[2025-07-10 19:28:40] INFO: Bot attempting to reconnect to Discord API. (Failed)</div>
+                    <div class="log-entry info-log">[2025-07-10 19:28:35] INFO: Bot status changed to 'Starting up...'.</div>
+                    <div class="log-entry critical-log">[2025-07-10 19:28:30] ERROR: Unhandled promise rejection. Bot process crashing.</div>
+                </div>
+                <p style="text-align: center; margin-top: 20px; font-style: italic; color: #718096;">Tüm log kayıtları botun kalıcı olarak devre dışı kalmasından önce sonlandırılmıştır.</p>
             </div>
         </div>
-    </div>
 
-    <div id="supportModal" class="modal">
-        <div class="modal-content">
-            <span class="close-button" id="closeSupportModalBtn">&times;</span>
-            <h2 class="modal-title"><i class="fas fa-headset"></i> Destek ile İletişim</h2>
-            <div class="modal-body">
-                <p>Herhangi bir sorunuz, geri bildiriminiz veya teknik destek ihtiyacınız için bizimle iletişime geçebilirsiniz.</p>
-                <label for="supportSubject">Konu:</label>
-                <input type="text" id="supportSubject" placeholder="Örn: Bakiye Sorunu, Teknik Destek">
-                <label for="supportMessage">Mesajınız:</label>
-                <textarea id="supportMessage" rows="5" placeholder="Mesajınızı buraya yazın..." style="width: calc(100% - 28px); padding: 18px; border: 1px solid var(--border-color); border-radius: 10px; font-size: 1.15em; box-sizing: border-box; resize: vertical; transition: border-color 0.3s, box-shadow 0.3s;"></textarea>
-                <button class="btn btn-primary" id="sendSupportMessageBtn"><i class="fas fa-paper-plane"></i> Mesaj Gönder</button>
+        <div id="support-section" class="content-section">
+            <div class="section-container">
+                <h2>Destek ve Yardım</h2>
+                <p>ChatNova botunuz şu anda çalışmadığı için, herhangi bir teknik destek veya sorun giderme işlemi için lütfen aşağıdaki adımları izleyin.</p>
+                <ul>
+                    <li>**Geliştirici Ekibiyle İletişime Geçin:** Botun kritik durumu nedeniyle, en hızlı çözüm için doğrudan geliştirici ekibinizle iletişime geçmeniz gerekmektedir. Bu panel üzerinden otomatik bir destek talebi gönderilememektedir.</li>
+                    <li>**Hata Raporu Oluşturma:** Yukarıdaki "Sistem Logları" bölümündeki kritik logları kopyalayıp geliştiricilerinize iletmeniz, sorunun teşhisinde yardımcı olacaktır.</li>
+                    <li>**Yeniden Dağıtım:** Botunuzun tamamen silinmiş olması nedeniyle, bir sonraki adım muhtemelen botun tamamen yeniden dağıtılması ve baştan kurulması olacaktır.</li>
+                    <li>**Dokümantasyon:** (Botunuz çalışmıyor olsa da) Mevcutsa, botun kurulum ve sorun giderme belgelerini gözden geçirebilirsiniz.</li>
+                </ul>
+                <p style="margin-top: 20px; font-weight: 600; color: var(--critical-red);">Unutmayın, bu panelden botu etkileşimli olarak onarmak mümkün değildir.</p>
             </div>
         </div>
+
     </div>
-
-    <div id="profileEditModal" class="modal">
-        <div class="modal-content">
-            <span class="close-button" id="closeProfileEditModalBtn">&times;</span>
-            <h2 class="modal-title"><i class="fas fa-user-edit"></i> Profili Düzenle</h2>
-            <div class="modal-body">
-                <p>Profil bilgilerinizi güncelleyin ve CodeMint topluluğundaki varlığınızı kişiselleştirin.</p>
-                <label for="editProfileName">Ad Soyad:</label>
-                <input type="text" id="editProfileName" placeholder="Ad Soyad">
-                <label for="editProfileUsername">Kullanıcı Adı:</label>
-                <input type="text" id="editProfileUsername" placeholder="Kullanıcı Adı">
-                <label for="editProfileEmail">E-posta:</label>
-                <input type="text" id="editProfileEmail" placeholder="email@example.com">
-                <label for="editProfileRole">Rol:</label>
-                <input type="text" id="editProfileRole" placeholder="Örn: Kıdemli Geliştirici">
-                <button class="btn btn-primary" id="saveProfileBtn"><i class="fas fa-save"></i> Değişiklikleri Kaydet</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="addSoftwareModal" class="modal">
-        <div class="modal-content">
-            <span class="close-button" id="closeAddSoftwareModalBtn">&times;</span>
-            <h2 class="modal-title"><i class="fas fa-plus-square"></i> Yeni Yazılım Ekle</h2>
-            <div class="modal-body">
-                <p>Yeni bir yazılım projesi oluşturun ve geliştirme yolculuğunuza başlayın.</p>
-                <label for="newSoftwareTitle">Yazılım Adı:</label>
-                <input type="text" id="newSoftwareTitle" placeholder="Örn: Finans Yönetim Sistemi">
-                <label for="newSoftwareDescription">Açıklama:</label>
-                <textarea id="newSoftwareDescription" rows="3" placeholder="Yazılımınızın kısa bir açıklaması..."></textarea>
-                <label for="newSoftwareStatus">Durum:</label>
-                <select id="newSoftwareStatus">
-                    <option value="Aktif">Aktif</option>
-                    <option value="Geliştirmede">Geliştirmede</option>
-                    <option value="Bakımda">Bakımda</option>
-                    <option value="Durduruldu">Durduruldu</option>
-                </select>
-                <button class="btn btn-primary" id="createSoftwareBtn"><i class="fas fa-plus"></i> Oluştur</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="balanceDetailsModal" class="modal">
-        <div class="modal-content">
-            <span class="close-button" id="closeBalanceDetailsModalBtn">&times;</span>
-            <h2 class="modal-title"><i class="fas fa-info-circle"></i> Bakiye ve Hesap Detayları</h2>
-            <div class="modal-body" style="text-align: left;">
-                <p style="text-align: center; margin-bottom: 25px;">Güncel finansal durumunuz ve hesap bilgileriniz aşağıdadır.</p>
-
-                <div class="balance-details-row">
-                    <span class="balance-details-label"><i class="fas fa-wallet"></i> Mevcut Bakiye:</span>
-                    <span class="balance-details-value" id="detailCurrentBalance">0.00₺</span>
-                </div>
-                <div class="balance-details-row">
-                    <span class="balance-details-label"><i class="fas fa-coins"></i> Toplam Kazanılan:</span>
-                    <span class="balance-details-value" id="detailTotalEarned">0.00₺</span>
-                </div>
-                <div class="balance-details-row">
-                    <span class="balance-details-label"><i class="fas fa-arrow-alt-circle-down"></i> Son Kazanç:</span>
-                    <span class="balance-details-value" id="detailLastEarnings">0.00₺</span>
-                </div>
-                 <div class="balance-details-row">
-                    <span class="balance-details-label"><i class="fas fa-arrow-alt-circle-up"></i> Toplam Çekilen:</span>
-                    <span class="balance-details-value text-accent" id="detailTotalWithdrawn">0.00₺</span>
-                </div>
-
-                <h3 style="margin-top: 40px; margin-bottom: 20px; font-size: 1.8em; color: var(--secondary-color); text-align: center;"><i class="fas fa-user"></i> Hesap Bilgileri</h3>
-                <div class="balance-details-row">
-                    <span class="balance-details-label">Ad Soyad:</span>
-                    <span class="balance-details-value text-accent" id="detailProfileName"></span>
-                </div>
-                <div class="balance-details-row">
-                    <span class="balance-details-label">Kullanıcı Adı:</span>
-                    <span class="balance-details-value text-accent" id="detailProfileUsername"></span>
-                </div>
-                <div class="balance-details-row">
-                    <span class="balance-details-label">E-posta:</span>
-                    <span class="balance-details-value text-accent" id="detailProfileEmail"></span>
-                </div>
-                 <div class="balance-details-row">
-                    <span class="balance-details-label">Rol:</span>
-                    <span class="balance-details-value text-accent" id="detailProfileRole"></span>
-                </div>
-            </div>
-        </div>
-    </div>
-
 
     <script>
+        // JavaScript Başlangıcı
         document.addEventListener('DOMContentLoaded', () => {
-            // --- DOM Elementleri ---
-            const balanceDisplay = document.getElementById('balanceDisplay');
-            const codeEditor = document.getElementById('codeEditor');
-            const lastEarningsDisplay = document.getElementById('lastEarnings');
-            const activeProjectsCount = document.getElementById('activeProjectsCount');
-            const pendingBugsCount = document.getElementById('pendingBugs');
+            const sidebarLinks = document.querySelectorAll('.sidebar ul li a');
+            const contentSections = document.querySelectorAll('.content-section');
 
-            const runCodeBtn = document.getElementById('runCodeBtn');
-            const downloadProjectBtn = document.getElementById('downloadProjectBtn');
-            const deployUpdateBtn = document.getElementById('deployUpdateBtn');
-            const viewLogsBtn = document.getElementById('viewLogsBtn');
-            const openWithdrawModalBtn = document.getElementById('openWithdrawModalBtn');
-            const viewTransactionsBtn = document.getElementById('viewTransactionsBtn');
-            const viewReportsBtn = document.getElementById('viewReportsBtn');
-            const contactSupportBtn = document.getElementById('contactSupportBtn');
-            const addNewSoftwareBtn = document.getElementById('addNewSoftwareBtn');
+            // İlk olarak Genel Bakış bölümünü göster
+            document.getElementById('overview-section').classList.add('active-section');
 
-            const errorMessage = document.getElementById('errorMessage');
-            const successMessage = document.getElementById('successMessage');
-            const infoMessage = document.getElementById('infoMessage');
+            sidebarLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
 
-            // Withdraw Modal Elements
-            const withdrawModal = document.getElementById('withdrawModal');
-            const closeWithdrawModalBtn = document.getElementById('closeWithdrawModalBtn');
-            const confirmWithdrawBtn = document.getElementById('confirmWithdrawBtn');
-            const cardNumberInput = document.getElementById('cardNumber');
-            const cardHolderNameInput = document.getElementById('cardHolderName');
-            const amountToWithdrawInput = document.getElementById('amountToWithdraw');
+                    // Aktif linki kaldır, tıklanan linki aktif yap
+                    sidebarLinks.forEach(item => item.classList.remove('active'));
+                    link.classList.add('active');
 
-            // Transactions Modal Elements
-            const transactionsModal = document.getElementById('transactionsModal');
-            const closeTransactionsModalBtn = document.getElementById('closeTransactionsModalBtn');
-            const transactionList = document.getElementById('transactionList');
-            const noTransactionsMessage = document.getElementById('noTransactionsMessage');
+                    // Tüm içerik bölümlerini gizle
+                    contentSections.forEach(section => section.classList.remove('active-section'));
 
-            // Reports Modal Elements
-            const reportsModal = document.getElementById('reportsModal');
-            const closeReportsModalBtn = document.getElementById('closeReportsModalBtn');
-            const totalEarnedReport = document.getElementById('totalEarnedReport');
-            const avgDailyEarnedReport = document.getElementById('avgDailyEarnedReport');
-            const maxSingleEarnedReport = document.getElementById('maxSingleEarnedReport');
-
-            // Support Modal Elements
-            const supportModal = document.getElementById('supportModal');
-            const closeSupportModalBtn = document.getElementById('closeSupportModalBtn');
-            const supportSubjectInput = document.getElementById('supportSubject');
-            const supportMessageTextarea = document.getElementById('supportMessage');
-            const sendSupportMessageBtn = document.getElementById('sendSupportMessageBtn');
-
-            // Profile Elements
-            const openProfileEditModalBtn = document.getElementById('openProfileEditModalBtn');
-            const profileNameDisplay = document.getElementById('profileName');
-            const profileUsernameDisplay = document.getElementById('profileUsername');
-            const profileEmailDisplay = document.getElementById('profileEmail');
-            const profileJoinDateDisplay = document.getElementById('profileJoinDate');
-
-            // Profile Edit Modal Elements
-            const profileEditModal = document.getElementById('profileEditModal');
-            const closeProfileEditModalBtn = document.getElementById('closeProfileEditModalBtn');
-            const editProfileNameInput = document.getElementById('editProfileName');
-            const editProfileUsernameInput = document.getElementById('editProfileUsername');
-            const editProfileEmailInput = document.getElementById('editProfileEmail');
-            const editProfileRoleInput = document.getElementById('editProfileRole');
-            const saveProfileBtn = document.getElementById('saveProfileBtn');
-
-            // Software Elements
-            const softwareListContainer = document.getElementById('softwareList');
-
-            // Add Software Modal Elements
-            const addSoftwareModal = document.getElementById('addSoftwareModal');
-            const closeAddSoftwareModalBtn = document.getElementById('closeAddSoftwareModalBtn');
-            const newSoftwareTitleInput = document.getElementById('newSoftwareTitle');
-            const newSoftwareDescriptionInput = document.getElementById('newSoftwareDescription');
-            const newSoftwareStatusSelect = document.getElementById('newSoftwareStatus');
-            const createSoftwareBtn = document.getElementById('createSoftwareBtn');
-
-            // Progress Bar Elements
-            const progressBarContainer = document.getElementById('progressBarContainer');
-            const progressBar = document.getElementById('progressBar');
-
-            // Balance Details Modal Elements (YENİ)
-            const openBalanceDetailsModalBtn = document.getElementById('openBalanceDetailsModalBtn');
-            const balanceDetailsModal = document.getElementById('balanceDetailsModal');
-            const closeBalanceDetailsModalBtn = document.getElementById('closeBalanceDetailsModalBtn');
-            const detailCurrentBalance = document.getElementById('detailCurrentBalance');
-            const detailTotalEarned = document.getElementById('detailTotalEarned');
-            const detailLastEarnings = document.getElementById('detailLastEarnings');
-            const detailTotalWithdrawn = document.getElementById('detailTotalWithdrawn');
-            const detailProfileName = document.getElementById('detailProfileName');
-            const detailProfileUsername = document.getElementById('detailProfileUsername');
-            const detailProfileEmail = document.getElementById('detailProfileEmail');
-            const detailProfileRole = document.getElementById('detailProfileRole');
-
-
-            // --- Veri Depolama (Sahte) ---
-            let currentBalance = parseFloat(localStorage.getItem('codeMintBalance')) || 1000.00;
-            let transactions = JSON.parse(localStorage.getItem('codeMintTransactions')) || [];
-            let totalEarned = parseFloat(localStorage.getItem('codeMintTotalEarned')) || 0.00;
-            let maxSingleEarned = parseFloat(localStorage.getItem('codeMintMaxSingleEarned')) || 0.00;
-            let lastEarnedAmount = parseFloat(localStorage.getItem('codeMintLastEarnedAmount')) || 0.00;
-            let totalWithdrawn = parseFloat(localStorage.getItem('codeMintTotalWithdrawn')) || 0.00; // Yeni eklendi
-            let activeProjects = parseInt(localStorage.getItem('codeMintActiveProjects')) || 3;
-            let pendingBugs = parseInt(localStorage.getItem('codeMintPendingBugs')) || 0;
-
-            let userProfile = JSON.parse(localStorage.getItem('codeMintUserProfile')) || {
-                name: "Geliştirici Adı Soyadı",
-                username: "codemint_dev",
-                email: "dev@codemint.com",
-                role: "Kıdemli Yazılım Mühendisi",
-                joinDate: "01.01.2023"
-            };
-
-            let softwares = JSON.parse(localStorage.getItem('codeMintSoftwares')) || [
-                { id: 1, title: "AI Chatbot Entegrasyonu", icon: "fas fa-robot", status: "Aktif", description: "Müşteri hizmetleri için yapay zeka destekli sohbet botu modülü." },
-                { id: 2, title: "Güvenli Veritabanı Modülü", icon: "fas fa-lock", status: "Bakımda", description: "Uygulama verilerinin güvenli depolanması ve şifrelenmesi." },
-                { id: 3, title: "Lojistik Takip Sistemi", icon: "fas fa-truck-loading", status: "Geliştirmede", description: "Gerçek zamanlı kargo takibi ve rota optimizasyonu." }
-            ];
-
-            // --- Yardımcı Fonksiyonlar ---
-
-            function saveState() {
-                localStorage.setItem('codeMintBalance', currentBalance.toFixed(2));
-                localStorage.setItem('codeMintTransactions', JSON.stringify(transactions));
-                localStorage.setItem('codeMintTotalEarned', totalEarned.toFixed(2));
-                localStorage.setItem('codeMintMintMaxSingleEarned', maxSingleEarned.toFixed(2));
-                localStorage.setItem('codeMintLastEarnedAmount', lastEarnedAmount.toFixed(2));
-                localStorage.setItem('codeMintTotalWithdrawn', totalWithdrawn.toFixed(2)); // Yeni eklendi
-                localStorage.setItem('codeMintActiveProjects', activeProjects);
-                localStorage.setItem('codeMintPendingBugs', pendingBugs);
-                localStorage.setItem('codeMintUserProfile', JSON.stringify(userProfile));
-                localStorage.setItem('codeMintSoftwares', JSON.stringify(softwares));
-            }
-
-            function updateDashboard() {
-                balanceDisplay.textContent = `${currentBalance.toFixed(2)}₺`;
-                lastEarningsDisplay.textContent = `${lastEarnedAmount.toFixed(2)}₺`;
-                activeProjectsCount.textContent = activeProjects;
-                pendingBugsCount.textContent = pendingBugs;
-                amountToWithdrawInput.value = currentBalance.toFixed(2);
-                updateProfileDisplay();
-                renderSoftwares();
-                saveState();
-            }
-
-            function showMessage(element, messageText) {
-                [errorMessage, successMessage, infoMessage].forEach(msgEl => {
-                    msgEl.style.opacity = 0;
-                    msgEl.style.display = 'none';
-                    clearTimeout(msgEl.hideTimeout);
-                });
-
-                element.textContent = messageText;
-                element.style.display = 'block';
-                setTimeout(() => { element.style.opacity = 1; }, 10);
-
-                element.hideTimeout = setTimeout(() => {
-                    element.style.opacity = 0;
-                    setTimeout(() => { element.style.display = 'none'; }, 500);
-                }, 5000);
-            }
-
-            function addTransaction(type, amount, status, details = '') {
-                const date = new Date().toLocaleString('tr-TR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
-                transactions.unshift({ date, type, amount, status, details });
-                saveState();
-                renderTransactions();
-            }
-
-            function renderTransactions() {
-                transactionList.innerHTML = '';
-                if (transactions.length === 0) {
-                    noTransactionsMessage.style.display = 'block';
-                } else {
-                    noTransactionsMessage.style.display = 'none';
-                    transactions.forEach(transaction => {
-                        const li = document.createElement('li');
-                        let statusClass = '';
-                        if (transaction.status === 'Başarılı') statusClass = 'transaction-status-success';
-                        else if (transaction.status === 'Başarısız') statusClass = 'transaction-status-fail';
-                        else if (transaction.status === 'Bilgi') statusClass = 'transaction-status-info';
-
-                        li.innerHTML = `
-                            <strong>Tarih:</strong> ${transaction.date}<br>
-                            <strong>Tür:</strong> ${transaction.type}<br>
-                            <strong>Tutar:</strong> ${transaction.amount !== 0 ? transaction.amount.toFixed(2) + '₺' : 'N/A'}<br>
-                            <strong>Durum:</strong> <span class="${statusClass}">${transaction.status}</span>
-                            ${transaction.details ? `<br><small style="color:var(--text-light-color);">${transaction.details}</small>` : ''}
-                        `;
-                        transactionList.appendChild(li);
-                    });
-                }
-            }
-
-            function updateReports() {
-                totalEarnedReport.textContent = `${totalEarned.toFixed(2)}₺`;
-
-                const earnedTransactions = transactions.filter(t => t.type === 'Kod Çalıştırma' && t.status === 'Başarılı');
-                if (earnedTransactions.length > 0) {
-                    const firstTransactionDate = new Date(earnedTransactions[earnedTransactions.length - 1].date.replace(/(\d{2})\.(\d{2})\.(\d{4})/, '$3-$2-$1'));
-                    const lastTransactionDate = new Date(earnedTransactions[0].date.replace(/(\d{2})\.(\d{2})\.(\d{4})/, '$3-$2-$1'));
-                    const diffTime = Math.abs(lastTransactionDate - firstTransactionDate);
-                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
-
-                    avgDailyEarnedReport.textContent = `${(totalEarned / diffDays).toFixed(2)}₺`;
-                } else {
-                    avgDailyEarnedReport.textContent = `0.00₺`;
-                }
-                maxSingleEarnedReport.textContent = `${maxSingleEarned.toFixed(2)}₺`;
-            }
-
-            function simulateProgressBar(duration, callback) {
-                progressBarContainer.style.display = 'block';
-                let width = 0;
-                const interval = setInterval(() => {
-                    width += 1;
-                    progressBar.style.width = width + '%';
-                    progressBar.textContent = width + '%';
-                    if (width >= 100) {
-                        clearInterval(interval);
-                        setTimeout(() => {
-                            progressBarContainer.style.display = 'none';
-                            progressBar.style.width = '0%';
-                            progressBar.textContent = '';
-                            callback();
-                        }, 500);
+                    // Tıklanan linke karşılık gelen bölümü göster
+                    const targetSectionId = link.getAttribute('data-section') + '-section';
+                    const targetSection = document.getElementById(targetSectionId);
+                    if (targetSection) {
+                        targetSection.classList.add('active-section');
                     }
-                }, duration / 100);
-            }
-
-            function setButtonLoading(button, isLoading) {
-                if (isLoading) {
-                    button.classList.add('loading');
-                    button.innerHTML = '<span class="spinner"></span> Yükleniyor...';
-                } else {
-                    button.classList.remove('loading');
-                    // Restore original icon and text
-                    if (button.id === 'runCodeBtn') button.innerHTML = '<i class="fas fa-play"></i> Kodu Çalıştır & Kazanç Hesapla';
-                    else if (button.id === 'downloadProjectBtn') button.innerHTML = '<i class="fas fa-download"></i> Proje Dosyalarını İndir';
-                    else if (button.id === 'deployUpdateBtn') button.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> Yazılımı Güncelle';
-                    else if (button.id === 'viewLogsBtn') button.innerHTML = '<i class="fas fa-bug"></i> Hata Kayıtlarını Görüntüle';
-                    else if (button.id === 'confirmWithdrawBtn') button.innerHTML = '<i class="fas fa-check-circle"></i> Aktarımı Onayla';
-                    else if (button.id === 'sendSupportMessageBtn') button.innerHTML = '<i class="fas fa-paper-plane"></i> Mesaj Gönder';
-                    else if (button.id === 'saveProfileBtn') button.innerHTML = '<i class="fas fa-save"></i> Değişiklikleri Kaydet';
-                    else if (button.id === 'createSoftwareBtn') button.innerHTML = '<i class="fas fa-plus"></i> Oluştur';
-                }
-            }
-
-            function updateProfileDisplay() {
-                profileNameDisplay.textContent = userProfile.name;
-                profileUsernameDisplay.textContent = userProfile.username;
-                profileEmailDisplay.textContent = userProfile.email;
-                profileJoinDateDisplay.textContent = userProfile.joinDate;
-                editProfileNameInput.value = userProfile.name;
-                editProfileUsernameInput.value = userProfile.username;
-                editProfileEmailInput.value = userProfile.email;
-                editProfileRoleInput.value = userProfile.role;
-            }
-
-            function renderSoftwares() {
-                softwareListContainer.innerHTML = ''; // Mevcut listeyi temizle
-                if (softwares.length === 0) {
-                    softwareListContainer.innerHTML = '<p style="text-align: center; color: var(--text-light-color);">Henüz bir yazılımınız bulunmamaktadır. Yeni bir yazılım ekleyin!</p>';
-                    return;
-                }
-
-                softwares.forEach(sw => {
-                    const softwareItem = document.createElement('div');
-                    softwareItem.classList.add('software-item');
-                    
-                    let statusClass = '';
-                    let actionButtons = '';
-                    switch(sw.status) {
-                        case 'Aktif':
-                            statusClass = 'status-active';
-                            actionButtons = `
-                                <button class="btn btn-primary"><i class="fas fa-chart-line"></i> Performans</button>
-                                <button class="btn btn-accent"><i class="fas fa-cog"></i> Ayarlar</button>
-                                <button class="btn btn-danger delete-software-btn" data-id="${sw.id}"><i class="fas fa-trash-alt"></i> Sil</button>
-                            `;
-                            break;
-                        case 'Geliştirmede':
-                            statusClass = 'status-development';
-                            actionButtons = `
-                                <button class="btn btn-primary"><i class="fas fa-code"></i> Kodu Düzenle</button>
-                                <button class="btn btn-danger stop-software-btn" data-id="${sw.id}"><i class="fas fa-times-circle"></i> Durdur</button>
-                                <button class="btn btn-danger delete-software-btn" data-id="${sw.id}"><i class="fas fa-trash-alt"></i> Sil</button>
-                            `;
-                            break;
-                        case 'Bakımda':
-                            statusClass = 'status-maintenance';
-                            actionButtons = `
-                                <button class="btn btn-primary"><i class="fas fa-wrench"></i> Onar</button>
-                                <button class="btn btn-secondary"><i class="fas fa-file-alt"></i> Döküman</button>
-                                <button class="btn btn-danger delete-software-btn" data-id="${sw.id}"><i class="fas fa-trash-alt"></i> Sil</button>
-                            `;
-                            break;
-                        case 'Durduruldu':
-                            statusClass = 'status-danger'; /* Yeni bir sınıf tanımlanabilir */
-                             actionButtons = `
-                                <button class="btn btn-primary"><i class="fas fa-play"></i> Başlat</button>
-                                <button class="btn btn-danger delete-software-btn" data-id="${sw.id}"><i class="fas fa-trash-alt"></i> Sil</button>
-                            `;
-                            break;
-                        default:
-                            statusClass = '';
-                            actionButtons = `
-                                <button class="btn btn-accent"><i class="fas fa-info-circle"></i> Detaylar</button>
-                                <button class="btn btn-danger delete-software-btn" data-id="${sw.id}"><i class="fas fa-trash-alt"></i> Sil</button>
-                            `;
-                    }
-
-
-                    softwareItem.innerHTML = `
-                        <div class="software-icon"><i class="${sw.icon || 'fas fa-cogs'}"></i></div>
-                        <div class="software-title">${sw.title}</div>
-                        <span class="software-status ${statusClass}">${sw.status}</span>
-                        <p class="software-description">${sw.description}</p>
-                        <div class="software-actions btn-group">
-                            ${actionButtons}
-                        </div>
-                    `;
-                    softwareListContainer.appendChild(softwareItem);
-                });
-
-                // Delete butonlarına event listener ekle
-                document.querySelectorAll('.delete-software-btn').forEach(button => {
-                    button.addEventListener('click', (event) => {
-                        const softwareId = parseInt(event.currentTarget.dataset.id);
-                        if (confirm('Bu yazılımı silmek istediğinize emin misiniz?')) {
-                            softwares = softwares.filter(sw => sw.id !== softwareId);
-                            activeProjects = softwares.length; // Proje sayısını güncelle
-                            saveState();
-                            updateDashboard();
-                            showMessage(successMessage, 'Yazılım başarıyla silindi!');
-                            addTransaction('Yazılım Silme', 0, 'Bilgi', `${softwareId} ID'li yazılım silindi.`);
-                        }
-                    });
-                });
-            }
-
-            // --- Buton İşlevleri ---
-
-            runCodeBtn.addEventListener('click', () => {
-                setButtonLoading(runCodeBtn, true);
-                simulateProgressBar(2000, () => {
-                    const codeLines = codeEditor.innerText.split('\n').filter(line => line.trim() !== '').length;
-                    const baseEarned = Math.floor(Math.random() * 150) + 75;
-                    const lineBonus = codeLines * 0.05;
-                    const totalEarnedThisRun = parseFloat((baseEarned + lineBonus).toFixed(2));
-
-                    currentBalance += totalEarnedThisRun;
-                    totalEarned += totalEarnedThisRun;
-                    lastEarnedAmount = totalEarnedThisRun;
-                    if (totalEarnedThisRun > maxSingleEarned) {
-                        maxSingleEarned = totalEarnedThisRun;
-                    }
-
-                    updateDashboard();
-                    addTransaction('Kod Çalıştırma', totalEarnedThisRun, 'Başarılı', 'Yeni özellikler geliştirildi ve test edildi.');
-                    showMessage(successMessage, `Kod başarıyla derlendi ve çalıştırıldı! +${totalEarnedThisRun}₺ kazanç elde ettiniz.`);
-                    setButtonLoading(runCodeBtn, false);
                 });
             });
 
-            downloadProjectBtn.addEventListener('click', () => {
-                setButtonLoading(downloadProjectBtn, true);
-                showMessage(infoMessage, 'Proje dosyaları sıkıştırılıyor ve hazırlanıyor...');
-                simulateProgressBar(2500, () => {
-                    const fakeDownloadLink = document.createElement('a');
-                    fakeDownloadLink.href = 'data:application/octet-stream;base64,PHA+Q29kZU1pbnQgUHJvamUgRG9zeXlsYXJpIEJ1cmFkYSwgS2V5aWYgQWxpcw==';
-                    fakeDownloadLink.download = 'CodeMint_Proje_Paketi.zip';
-                    document.body.appendChild(fakeDownloadLink);
-                    fakeDownloadLink.click();
-                    document.body.removeChild(fakeDownloadLink);
-                    showMessage(successMessage, 'CodeMint_Proje_Paketi.zip başarıyla indirildi!');
-                    addTransaction('Dosya İndirme', 0, 'Bilgi', 'Proje dosyaları yerel diske kaydedildi.');
-                    setButtonLoading(downloadProjectBtn, false);
-                });
+            // Tüm düğmeleri devre dışı bırak ve kursörü 'not-allowed' yap
+            const buttons = document.querySelectorAll('.btn');
+            buttons.forEach(button => {
+                button.setAttribute('disabled', 'true');
+                button.style.cursor = 'not-allowed';
+                button.style.pointerEvents = 'none'; // Tıklama olaylarını tamamen engeller
             });
 
-            deployUpdateBtn.addEventListener('click', () => {
-                setButtonLoading(deployUpdateBtn, true);
-                showMessage(infoMessage, 'Sürüm kontrolü yapılıyor ve güncellemeler sunuculara dağıtılıyor...');
-                simulateProgressBar(3000, () => {
-                    const success = Math.random() > 0.15;
-                    if (success) {
-                        showMessage(successMessage, 'Yazılım başarıyla güncellendi! Yeni sürüm yayında.');
-                        addTransaction('Yazılım Güncelleme', 0, 'Başarılı', 'En son sürüm canlıya alındı.');
-                    } else {
-                        showMessage(errorMessage, 'Güncelleme sırasında kritik bir hata oluştu. Lütfen teknik destek ile iletişime geçin.');
-                        addTransaction('Yazılım Güncelleme', 0, 'Başarısız', 'Dağıtım hatası: Sunucu bağlantısı kesildi.');
-                    }
-                    updateDashboard();
-                    setButtonLoading(deployUpdateBtn, false);
-                });
+            // Tüm input ve textarea alanlarını devre dışı bırak
+            const formInputs = document.querySelectorAll('.settings-form input, .settings-form textarea');
+            formInputs.forEach(input => {
+                input.setAttribute('disabled', 'true');
+                input.style.cursor = 'not-allowed';
+                input.style.backgroundColor = 'var(--background-light)';
+                input.style.color = '#718096';
             });
-
-            viewLogsBtn.addEventListener('click', () => {
-                setButtonLoading(viewLogsBtn, true);
-                showMessage(infoMessage, 'Sistem kayıtları taranıyor...');
-                setTimeout(() => {
-                    pendingBugs = Math.floor(Math.random() * 3);
-                    if (pendingBugs === 0) {
-                        showMessage(successMessage, 'Sistem kayıtlarında herhangi bir yeni hata bulunamadı. Her şey yolunda!');
-                        addTransaction('Hata Kontrolü', 0, 'Başarılı', 'Sistem hatasız çalışıyor.');
-                    } else {
-                        showMessage(errorMessage, `Son kontrollerde ${pendingBugs} adet kritik hata tespit edildi. Lütfen en kısa sürede inceleyin.`);
-                        addTransaction('Hata Kontrolü', 0, 'Başarısız', `${pendingBugs} yeni hata tespit edildi.`);
-                    }
-                    updateDashboard();
-                    setButtonLoading(viewLogsBtn, false);
-                }, 1500);
-            });
-
-            contactSupportBtn.addEventListener('click', () => {
-                supportModal.classList.add('active');
-            });
-
-            sendSupportMessageBtn.addEventListener('click', () => {
-                setButtonLoading(sendSupportMessageBtn, true);
-                const subject = supportSubjectInput.value.trim();
-                const message = supportMessageTextarea.value.trim();
-
-                if (!subject || !message) {
-                    showMessage(errorMessage, 'Lütfen konu ve mesaj alanlarını doldurun.');
-                    setButtonLoading(sendSupportMessageBtn, false);
-                    return;
-                }
-
-                showMessage(infoMessage, 'Mesajınız gönderiliyor...');
-                setTimeout(() => {
-                    const success = Math.random() > 0.1;
-                    if (success) {
-                        showMessage(successMessage, 'Destek mesajınız başarıyla gönderildi! En kısa sürede size dönüş yapacağız.');
-                        addTransaction('Destek Mesajı', 0, 'Başarılı', `Konu: ${subject}`);
-                        supportSubjectInput.value = '';
-                        supportMessageTextarea.value = '';
-                        supportModal.classList.remove('active');
-                    } else {
-                        showMessage(errorMessage, 'Mesajınızı gönderirken bir hata oluştu. Lütfen tekrar deneyin.');
-                        addTransaction('Destek Mesajı', 0, 'Başarısız', `Konu: ${subject}`);
-                    }
-                    setButtonLoading(sendSupportMessageBtn, false);
-                }, 2000);
-            });
-
-            openProfileEditModalBtn.addEventListener('click', () => {
-                updateProfileDisplay(); // Modal açılırken güncel veriyi çek
-                profileEditModal.classList.add('active');
-            });
-
-            saveProfileBtn.addEventListener('click', () => {
-                setButtonLoading(saveProfileBtn, true);
-                const newName = editProfileNameInput.value.trim();
-                const newUsername = editProfileUsernameInput.value.trim();
-                const newEmail = editProfileEmailInput.value.trim();
-                const newRole = editProfileRoleInput.value.trim();
-
-                if (!newName || !newUsername || !newEmail || !newRole) {
-                    showMessage(errorMessage, 'Lütfen tüm profil alanlarını doldurun.');
-                    setButtonLoading(saveProfileBtn, false);
-                    return;
-                }
-
-                userProfile.name = newName;
-                userProfile.username = newUsername;
-                userProfile.email = newEmail;
-                userProfile.role = newRole;
-
-                showMessage(infoMessage, 'Profiliniz güncelleniyor...');
-                setTimeout(() => {
-                    updateDashboard();
-                    profileEditModal.classList.remove('active');
-                    showMessage(successMessage, 'Profil bilgileriniz başarıyla güncellendi!');
-                    addTransaction('Profil Güncelleme', 0, 'Başarılı', 'Geliştirici profili güncellendi.');
-                    setButtonLoading(saveProfileBtn, false);
-                }, 1500);
-            });
-
-            addNewSoftwareBtn.addEventListener('click', () => {
-                addSoftwareModal.classList.add('active');
-            });
-
-            createSoftwareBtn.addEventListener('click', () => {
-                setButtonLoading(createSoftwareBtn, true);
-                const title = newSoftwareTitleInput.value.trim();
-                const description = newSoftwareDescriptionInput.value.trim();
-                const status = newSoftwareStatusSelect.value;
-
-                if (!title || !description) {
-                    showMessage(errorMessage, 'Lütfen yazılım adı ve açıklamasını doldurun.');
-                    setButtonLoading(createSoftwareBtn, false);
-                    return;
-                }
-
-                showMessage(infoMessage, 'Yeni yazılım projesi oluşturuluyor...');
-                setTimeout(() => {
-                    const newSoftware = {
-                        id: softwares.length > 0 ? Math.max(...softwares.map(sw => sw.id)) + 1 : 1,
-                        title: title,
-                        icon: "fas fa-code", // Varsayılan ikon
-                        status: status,
-                        description: description
-                    };
-                    softwares.push(newSoftware);
-                    activeProjects = softwares.length; // Proje sayısını güncelle
-                    updateDashboard();
-                    addSoftwareModal.classList.remove('active');
-                    showMessage(successMessage, `"${title}" adlı yeni yazılım başarıyla oluşturuldu!`);
-                    addTransaction('Yazılım Oluşturma', 0, 'Başarılı', `Yeni yazılım: ${title}`);
-
-                    newSoftwareTitleInput.value = '';
-                    newSoftwareDescriptionInput.value = '';
-                    newSoftwareStatusSelect.value = 'Geliştirmede'; // Varsayılana döndür
-                    setButtonLoading(createSoftwareBtn, false);
-                }, 2000);
-            });
-
-            // --- Modal Kapatma İşlevleri ---
-
-            openWithdrawModalBtn.addEventListener('click', () => {
-                updateDashboard();
-                withdrawModal.classList.add('active');
-            });
-
-            closeWithdrawModalBtn.addEventListener('click', () => {
-                withdrawModal.classList.remove('active');
-            });
-
-            viewTransactionsBtn.addEventListener('click', () => {
-                renderTransactions();
-                transactionsModal.classList.add('active');
-            });
-
-            closeTransactionsModalBtn.addEventListener('click', () => {
-                transactionsModal.classList.remove('active');
-            });
-
-            viewReportsBtn.addEventListener('click', () => {
-                updateReports();
-                reportsModal.classList.add('active');
-            });
-
-            closeReportsModalBtn.addEventListener('click', () => {
-                reportsModal.classList.remove('active');
-            });
-
-            closeSupportModalBtn.addEventListener('click', () => {
-                supportModal.classList.remove('active');
-            });
-
-            closeProfileEditModalBtn.addEventListener('click', () => {
-                profileEditModal.classList.remove('active');
-            });
-
-            closeAddSoftwareModalBtn.addEventListener('click', () => {
-                addSoftwareModal.classList.remove('active');
-            });
-
-            // Bakiye Detayları Modalı Açma (YENİ)
-            openBalanceDetailsModalBtn.addEventListener('click', () => {
-                detailCurrentBalance.textContent = `${currentBalance.toFixed(2)}₺`;
-                detailTotalEarned.textContent = `${totalEarned.toFixed(2)}₺`;
-                detailLastEarnings.textContent = `${lastEarnedAmount.toFixed(2)}₺`;
-                detailTotalWithdrawn.textContent = `${totalWithdrawn.toFixed(2)}₺`; // Total çekilen bakiyeyi göster
-                detailProfileName.textContent = userProfile.name;
-                detailProfileUsername.textContent = userProfile.username;
-                detailProfileEmail.textContent = userProfile.email;
-                detailProfileRole.textContent = userProfile.role; // Rolü de göster
-
-                balanceDetailsModal.classList.add('active');
-            });
-
-            // Bakiye Detayları Modalı Kapatma (YENİ)
-            closeBalanceDetailsModalBtn.addEventListener('click', () => {
-                balanceDetailsModal.classList.remove('active');
-            });
-
-
-            window.addEventListener('click', (event) => {
-                if (event.target == withdrawModal) { withdrawModal.classList.remove('active'); }
-                if (event.target == transactionsModal) { transactionsModal.classList.remove('active'); }
-                if (event.target == reportsModal) { reportsModal.classList.remove('active'); }
-                if (event.target == supportModal) { supportModal.classList.remove('active'); }
-                if (event.target == profileEditModal) { profileEditModal.classList.remove('active'); }
-                if (event.target == addSoftwareModal) { addSoftwareModal.classList.remove('active'); }
-                if (event.target == balanceDetailsModal) { balanceDetailsModal.classList.remove('active'); } // Yeni eklendi
-            });
-
-            // Kart Numarası Formatlama
-            cardNumberInput.addEventListener('input', (event) => {
-                let value = event.target.value.replace(/\s/g, '');
-                let formattedValue = '';
-                for (let i = 0; i < value.length; i++) {
-                    if (i > 0 && i % 4 === 0) {
-                        formattedValue += ' ';
-                    }
-                    formattedValue += value[i];
-                }
-                event.target.value = formattedValue;
-            });
-
-            // Aktarımı Onayla
-            confirmWithdrawBtn.addEventListener('click', () => {
-                setButtonLoading(confirmWithdrawBtn, true);
-                const enteredCardNumber = cardNumberInput.value.replace(/\s/g, '');
-                const enteredCardHolderName = cardHolderNameInput.value.trim();
-                const amount = parseFloat(amountToWithdrawInput.value);
-
-                if (!enteredCardNumber || enteredCardNumber.length < 19) {
-                    showMessage(errorMessage, 'Lütfen geçerli bir 16 haneli banka kartı numarası girin.');
-                    setButtonLoading(confirmWithdrawBtn, false);
-                    return;
-                }
-                if (!enteredCardHolderName) {
-                    showMessage(errorMessage, 'Lütfen kart sahibi adını ve soyadını girin.');
-                    setButtonLoading(confirmWithdrawBtn, false);
-                    return;
-                }
-                if (isNaN(amount) || amount <= 0 || amount > currentBalance) {
-                    showMessage(errorMessage, `Aktarılacak tutar geçersiz veya bakiyenizden fazla. Maksimum: ${currentBalance.toFixed(2)}₺`);
-                    setButtonLoading(confirmWithdrawBtn, false);
-                    return;
-                }
-
-                showMessage(infoMessage, 'Para aktarımı gerçekleştiriliyor...');
-                setTimeout(() => {
-                    const transferSuccess = Math.random() > 0.1;
-                    withdrawModal.classList.remove('active');
-
-                    if (transferSuccess) {
-                        currentBalance -= amount;
-                        totalWithdrawn += amount; // Çekilen bakiyeyi güncelle
-                        if (currentBalance < 0) currentBalance = 0;
-                        updateDashboard();
-                        addTransaction('Bakiye Aktarımı', amount, 'Başarılı', `Kart No: **** ${enteredCardNumber.slice(-4)}`);
-                        showMessage(successMessage, `${amount.toFixed(2)}₺ banka kartınıza başarıyla aktarıldı!`);
-                        cardNumberInput.value = '';
-                        cardHolderNameInput.value = '';
-                    } else {
-                        addTransaction('Bakiye Aktarımı', amount, 'Başarısız', 'Banka sistemlerinde hata oluştu.');
-                        showMessage(errorMessage, 'Para aktarımı sırasında bir hata oluştu. Lütfen bilgileri kontrol edip tekrar deneyin.');
-                    }
-                    setButtonLoading(confirmWithdrawBtn, false);
-                }, 2500);
-            });
-
-            // Sayfa yüklendiğinde başlangıç durumunu ayarla
-            updateDashboard();
-            renderTransactions(); // Initial render
-            renderSoftwares(); // Initial render of software list
         });
+        // JavaScript Sonu
     </script>
 </body>
 </html>
